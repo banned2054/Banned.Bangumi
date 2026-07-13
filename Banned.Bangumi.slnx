@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Banned.Bangumi/Banned.Bangumi.csproj" />
+  <Project Path="Banned.Bangumi.Test/Banned.Bangumi.Test.csproj" />
+</Solution>

@@ -1,0 +1,35 @@
+using Banned.Bangumi.Models.Enums;
+using System.Text.Json.Serialization;
+
+namespace Banned.Bangumi.Models;
+
+public partial record Person
+{
+    [JsonPropertyName("id")]
+    public int? Id { get; init; }
+
+    [JsonPropertyName("name")]
+    public string? Name { get; init; }
+
+    /// <summary>
+    /// `1`, `2`, `3` 表示 `个人`, `公司`, `组合`
+    /// </summary>
+    [JsonPropertyName("type")]
+    public int? Type { get; init; }
+
+    [JsonPropertyName("career")]
+    // TODO(system.text.json): Add ItemConverterType with enum converter when supported
+    public ICollection<PersonCareer>? Career { get; init; }
+
+    /// <summary>
+    /// object with some size of images, this object maybe `null`
+    /// </summary>
+    [JsonPropertyName("images")]
+    public PersonImages? Images { get; init; }
+
+    [JsonPropertyName("short_summary")]
+    public string? ShortSummary { get; init; }
+
+    [JsonPropertyName("locked")]
+    public bool? Locked { get; init; }
+}

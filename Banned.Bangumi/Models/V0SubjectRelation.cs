@@ -1,0 +1,24 @@
+using System.Text.Json.Serialization;
+
+namespace Banned.Bangumi.Models;
+
+public partial record V0SubjectRelation
+{
+    [JsonPropertyName("id")]
+    public int? Id { get; init; }
+
+    [JsonPropertyName("type")]
+    public int? Type { get; init; }
+
+    [JsonPropertyName("name")]
+    public string? Name { get; init; }
+
+    [JsonPropertyName("name_cn")]
+    public string? NameCn { get; init; }
+
+    [JsonPropertyName("images")]
+    public Images? Images { get; init; }
+
+    [JsonPropertyName("relation")]
+    public string? Relation { get; init; }
+}
