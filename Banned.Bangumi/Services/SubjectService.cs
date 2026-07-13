@@ -1,9 +1,9 @@
-using System.Globalization;
 using Banned.Bangumi.Exceptions;
 using Banned.Bangumi.Models;
 using Banned.Bangumi.Models.Enums;
 using Banned.Bangumi.Models.Subjects;
 using Banned.Bangumi.Services.Internal;
+using System.Globalization;
 
 namespace Banned.Bangumi.Services;
 
@@ -28,34 +28,29 @@ public sealed class SubjectService
     /// <exception cref="ArgumentOutOfRangeException">请求包含无效的类型或分页值。 / The request contains an invalid type or pagination value.</exception>
     /// <exception cref="BangumiApiException">API 返回错误或响应无法解析。 / The API returns an error or the response cannot be parsed.</exception>
     /// <exception cref="OperationCanceledException">请求被取消或超时。 / The request is cancelled or times out.</exception>
-    public async Task<PagedResult<Subject>> Browse(
-        SubjectBrowseRequest request,
-        CancellationToken cancellationToken = default)
+    public async Task<PagedResult<Subject>> Browse(SubjectBrowseRequest request,
+                                                   CancellationToken    cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         ValidateBrowseRequest(request);
 
-        var path = BangumiHttpService.AddQueryString(
-            "/v0/subjects",
-            new Dictionary<string, string?>
-            {
-                ["type"] = ((int)request.Type).ToString(CultureInfo.InvariantCulture),
-                ["cat"] = request.Category is { } category
-                    ? ((int)category).ToString(CultureInfo.InvariantCulture)
-                    : null,
-                ["series"] = FormatBoolean(request.Series),
-                ["platform"] = request.Platform,
-                ["sort"] = request.Sort?.ToString().ToLowerInvariant(),
-                ["year"] = FormatInteger(request.Year),
-                ["month"] = FormatInteger(request.Month),
-                ["limit"] = FormatInteger(request.Limit),
-                ["offset"] = FormatInteger(request.Offset)
-            });
+        var path = BangumiHttpService.AddQueryString("/v0/subjects", new Dictionary<string, string?>
+        {
+            ["type"] = ((int)request.Type).ToString(CultureInfo.InvariantCulture),
+            ["cat"] = request.Category is { } category
+                ? ((int)category).ToString(CultureInfo.InvariantCulture)
+                : null,
+            ["series"]   = FormatBoolean(request.Series),
+            ["platform"] = request.Platform,
+            ["sort"]     = request.Sort?.ToString().ToLowerInvariant(),
+            ["year"]     = FormatInteger(request.Year),
+            ["month"]    = FormatInteger(request.Month),
+            ["limit"]    = FormatInteger(request.Limit),
+            ["offset"]   = FormatInteger(request.Offset)
+        });
 
-        return await HttpService.Get<PagedResult<Subject>>(
-            path,
-            AuthenticationMode.Optional,
-            cancellationToken).ConfigureAwait(false);
+        return await HttpService.Get<PagedResult<Subject>>(path, AuthenticationMode.Optional, cancellationToken)
+                                .ConfigureAwait(false);
     }
 
     /// <summary>
@@ -71,10 +66,9 @@ public sealed class SubjectService
     public async Task<Subject> Get(int subjectId, CancellationToken cancellationToken = default)
     {
         ValidateSubjectId(subjectId);
-        return await HttpService.Get<Subject>(
-            $"/v0/subjects/{subjectId}",
-            AuthenticationMode.Optional,
-            cancellationToken).ConfigureAwait(false);
+        return await HttpService
+                    .Get<Subject>($"/v0/subjects/{subjectId}", AuthenticationMode.Optional, cancellationToken)
+                    .ConfigureAwait(false);
     }
 
     /// <summary>
@@ -88,10 +82,8 @@ public sealed class SubjectService
     /// <exception cref="ArgumentOutOfRangeException">条目 ID 或图片尺寸无效。 / The subject ID or image size is invalid.</exception>
     /// <exception cref="BangumiApiException">API 返回错误或未返回重定向目标。 / The API returns an error or does not return a redirect target.</exception>
     /// <exception cref="OperationCanceledException">请求被取消或超时。 / The request is cancelled or times out.</exception>
-    public async Task<Uri> GetImageUri(
-        int subjectId,
-        SubjectImageSize size,
-        CancellationToken cancellationToken = default)
+    public async Task<Uri> GetImageUri(int               subjectId, SubjectImageSize size,
+                                       CancellationToken cancellationToken = default)
     {
         ValidateSubjectId(subjectId);
         if (!Enum.IsDefined(size))
@@ -99,17 +91,12 @@ public sealed class SubjectService
             throw new ArgumentOutOfRangeException(nameof(size), size, "The image size is invalid.");
         }
 
-        var path = BangumiHttpService.AddQueryString(
-            $"/v0/subjects/{subjectId}/image",
-            new Dictionary<string, string?>
-            {
-                ["type"] = size.ToString().ToLowerInvariant()
-            });
+        var path = BangumiHttpService.AddQueryString($"/v0/subjects/{subjectId}/image",
+                                                     new Dictionary<string, string?>
+                                                         { ["type"] = size.ToString().ToLowerInvariant() });
 
-        return await HttpService.GetRedirectUri(
-            path,
-            AuthenticationMode.Optional,
-            cancellationToken).ConfigureAwait(false);
+        return await HttpService.GetRedirectUri(path, AuthenticationMode.Optional, cancellationToken)
+                                .ConfigureAwait(false);
     }
 
     /// <summary>
@@ -122,15 +109,13 @@ public sealed class SubjectService
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="subjectId"/> 小于 1。 / <paramref name="subjectId"/> is less than 1.</exception>
     /// <exception cref="BangumiApiException">API 返回错误或响应无法解析。 / The API returns an error or the response cannot be parsed.</exception>
     /// <exception cref="OperationCanceledException">请求被取消或超时。 / The request is cancelled or times out.</exception>
-    public async Task<IReadOnlyList<RelatedPerson>> GetPersons(
-        int subjectId,
-        CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<RelatedPerson>> GetPersons(int               subjectId,
+                                                               CancellationToken cancellationToken = default)
     {
         ValidateSubjectId(subjectId);
-        return await HttpService.Get<IReadOnlyList<RelatedPerson>>(
-            $"/v0/subjects/{subjectId}/persons",
-            AuthenticationMode.Optional,
-            cancellationToken).ConfigureAwait(false);
+        return await HttpService
+                    .Get<IReadOnlyList<RelatedPerson>>($"/v0/subjects/{subjectId}/persons", AuthenticationMode.Optional,
+                                                       cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -143,15 +128,14 @@ public sealed class SubjectService
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="subjectId"/> 小于 1。 / <paramref name="subjectId"/> is less than 1.</exception>
     /// <exception cref="BangumiApiException">API 返回错误或响应无法解析。 / The API returns an error or the response cannot be parsed.</exception>
     /// <exception cref="OperationCanceledException">请求被取消或超时。 / The request is cancelled or times out.</exception>
-    public async Task<IReadOnlyList<RelatedCharacter>> GetCharacters(
-        int subjectId,
-        CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<RelatedCharacter>> GetCharacters(int               subjectId,
+                                                                     CancellationToken cancellationToken = default)
     {
         ValidateSubjectId(subjectId);
-        return await HttpService.Get<IReadOnlyList<RelatedCharacter>>(
-            $"/v0/subjects/{subjectId}/characters",
-            AuthenticationMode.Optional,
-            cancellationToken).ConfigureAwait(false);
+        return await HttpService
+                    .Get<IReadOnlyList<RelatedCharacter>>($"/v0/subjects/{subjectId}/characters",
+                                                          AuthenticationMode.Optional, cancellationToken)
+                    .ConfigureAwait(false);
     }
 
     /// <summary>
@@ -164,15 +148,14 @@ public sealed class SubjectService
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="subjectId"/> 小于 1。 / <paramref name="subjectId"/> is less than 1.</exception>
     /// <exception cref="BangumiApiException">API 返回错误或响应无法解析。 / The API returns an error or the response cannot be parsed.</exception>
     /// <exception cref="OperationCanceledException">请求被取消或超时。 / The request is cancelled or times out.</exception>
-    public async Task<IReadOnlyList<SubjectRelation>> GetRelations(
-        int subjectId,
-        CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<SubjectRelation>> GetRelations(int               subjectId,
+                                                                   CancellationToken cancellationToken = default)
     {
         ValidateSubjectId(subjectId);
-        return await HttpService.Get<IReadOnlyList<SubjectRelation>>(
-            $"/v0/subjects/{subjectId}/subjects",
-            AuthenticationMode.Optional,
-            cancellationToken).ConfigureAwait(false);
+        return await HttpService
+                    .Get<IReadOnlyList<SubjectRelation>>($"/v0/subjects/{subjectId}/subjects",
+                                                         AuthenticationMode.Optional, cancellationToken)
+                    .ConfigureAwait(false);
     }
 
     /// <summary>
@@ -186,34 +169,27 @@ public sealed class SubjectService
     /// <exception cref="ArgumentNullException"><paramref name="request"/> 为 <see langword="null"/>。 / <paramref name="request"/> is <see langword="null"/>.</exception>
     /// <exception cref="BangumiApiException">API 返回错误或响应无法解析。 / The API returns an error or the response cannot be parsed.</exception>
     /// <exception cref="OperationCanceledException">请求被取消或超时。 / The request is cancelled or times out.</exception>
-    public async Task<PagedResult<Subject>> Search(
-        SubjectSearchRequest request,
-        CancellationToken cancellationToken = default)
+    public async Task<PagedResult<Subject>> Search(SubjectSearchRequest request,
+                                                   CancellationToken    cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         ValidateSearchRequest(request);
 
-        var path = BangumiHttpService.AddQueryString(
-            "/v0/search/subjects",
-            new Dictionary<string, string?>
-            {
-                ["limit"] = FormatInteger(request.Limit),
-                ["offset"] = FormatInteger(request.Offset)
-            });
+        var path = BangumiHttpService.AddQueryString("/v0/search/subjects",
+                                                     new Dictionary<string, string?>
+                                                     {
+                                                         ["limit"]  = FormatInteger(request.Limit),
+                                                         ["offset"] = FormatInteger(request.Offset)
+                                                     });
 
-        return await HttpService.Send<PagedResult<Subject>>(
-            HttpMethod.Post,
-            path,
-            AuthenticationMode.None,
-            request,
-            cancellationToken).ConfigureAwait(false);
+        return await HttpService
+                    .Send<PagedResult<Subject>>(HttpMethod.Post, path, AuthenticationMode.None, request,
+                                                cancellationToken).ConfigureAwait(false);
     }
 
-    private static string? FormatBoolean(bool? value) =>
-        value?.ToString().ToLowerInvariant();
+    private static string? FormatBoolean(bool? value) => value?.ToString().ToLowerInvariant();
 
-    private static string? FormatInteger(int? value) =>
-        value?.ToString(CultureInfo.InvariantCulture);
+    private static string? FormatInteger(int? value) => value?.ToString(CultureInfo.InvariantCulture);
 
     private static void ValidateBrowseRequest(SubjectBrowseRequest request)
     {
