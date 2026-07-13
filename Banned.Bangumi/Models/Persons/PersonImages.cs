@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Banned.Bangumi.Models;
+namespace Banned.Bangumi.Models.Persons;
 
 /// <summary>
 /// 表示人物或角色不同尺寸的图片地址。<br/>

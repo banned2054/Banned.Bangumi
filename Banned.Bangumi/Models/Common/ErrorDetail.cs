@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Banned.Bangumi.Models;
+namespace Banned.Bangumi.Models.Common;
 
 /// <summary>
 /// 表示 Bangumi API 返回的结构化错误详情。<br/>

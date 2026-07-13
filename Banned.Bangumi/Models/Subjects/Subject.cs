@@ -1,8 +1,7 @@
-using System.Text.Json.Serialization;
-using Banned.Bangumi.Models.Subjects;
 using Banned.Bangumi.Models.Enums;
+using System.Text.Json.Serialization;
 
-namespace Banned.Bangumi.Models;
+namespace Banned.Bangumi.Models.Subjects;
 
 /// <summary>
 /// 表示 Bangumi 条目详情。<br/>

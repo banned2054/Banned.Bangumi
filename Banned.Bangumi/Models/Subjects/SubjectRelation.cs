@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
-using Banned.Bangumi.Models.Subjects;
 
-namespace Banned.Bangumi.Models;
+namespace Banned.Bangumi.Models.Subjects;
 
 /// <summary>
 /// 表示两个条目之间的关联。<br/>

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Banned.Bangumi.Models;
+namespace Banned.Bangumi.Models.Common;
 
 /// <summary>
 /// 表示一页 API 结果。<br/>

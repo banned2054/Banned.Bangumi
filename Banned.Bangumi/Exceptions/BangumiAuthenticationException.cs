@@ -1,5 +1,5 @@
 using System.Net;
-using Banned.Bangumi.Models;
+using Banned.Bangumi.Models.Common;
 
 namespace Banned.Bangumi.Exceptions;
 

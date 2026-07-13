@@ -1,4 +1,4 @@
-using Banned.Bangumi.Models;
+using Banned.Bangumi.Models.Common;
 using System.Net;
 
 namespace Banned.Bangumi.Exceptions;

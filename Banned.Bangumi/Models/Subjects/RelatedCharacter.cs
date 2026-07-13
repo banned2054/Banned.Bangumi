@@ -1,7 +1,8 @@
-using System.Text.Json.Serialization;
 using Banned.Bangumi.Models.Enums;
+using Banned.Bangumi.Models.Persons;
+using System.Text.Json.Serialization;
 
-namespace Banned.Bangumi.Models;
+namespace Banned.Bangumi.Models.Subjects;
 
 /// <summary>
 /// 表示条目中的关联角色。<br/>

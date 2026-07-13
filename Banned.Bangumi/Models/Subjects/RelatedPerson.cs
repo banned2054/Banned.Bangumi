@@ -1,13 +1,14 @@
-using System.Text.Json.Serialization;
 using Banned.Bangumi.Models.Enums;
+using Banned.Bangumi.Models.Persons;
+using System.Text.Json.Serialization;
 
-namespace Banned.Bangumi.Models;
+namespace Banned.Bangumi.Models.Subjects;
 
 /// <summary>
-/// 表示人物概要信息。<br/>
-/// Represents summary information about a person.
+/// 表示参与条目制作的人物及其关联信息。<br/>
+/// Represents a person involved with a subject and the relationship details.
 /// </summary>
-public sealed record Person
+public sealed record RelatedPerson
 {
     /// <summary>获取人物 ID。<br/>Gets the person ID.</summary>
     [JsonPropertyName("id")]
@@ -29,11 +30,11 @@ public sealed record Person
     [JsonPropertyName("images")]
     public PersonImages? Images { get; init; }
 
-    /// <summary>获取人物简介。<br/>Gets the short summary.</summary>
-    [JsonPropertyName("short_summary")]
-    public string ShortSummary { get; init; } = string.Empty;
+    /// <summary>获取人物与条目的关系。<br/>Gets the person's relationship to the subject.</summary>
+    [JsonPropertyName("relation")]
+    public string Relation { get; init; } = string.Empty;
 
-    /// <summary>获取人物是否被锁定。<br/>Gets whether the person is locked.</summary>
-    [JsonPropertyName("locked")]
-    public bool Locked { get; init; }
+    /// <summary>获取参与的章节或曲目。<br/>Gets the involved episodes or tracks.</summary>
+    [JsonPropertyName("eps")]
+    public string Episodes { get; init; } = string.Empty;
 }
