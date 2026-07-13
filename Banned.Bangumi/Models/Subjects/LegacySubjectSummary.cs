@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using Banned.Bangumi.Models.Enums;
+using System.Text.Json.Serialization;
 
 namespace Banned.Bangumi.Models.Subjects;
 
@@ -106,12 +106,4 @@ public record LegacySubjectSummary
     /// </summary>
     [JsonPropertyName("collection")]
     public SubjectCollectionStats? Collection { get; init; }
-
-    /// <summary>
-    /// 获取或设置 Schema 未声明的附加 JSON 属性。<br/>
-    /// Gets or sets additional JSON properties not declared by the schema.
-    /// </summary>
-    [JsonExtensionData]
-    public IDictionary<string, object?> AdditionalProperties { get; init; } =
-        new Dictionary<string, object?>();
 }

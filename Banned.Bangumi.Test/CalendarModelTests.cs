@@ -72,7 +72,6 @@ public sealed class CalendarModelTests
             Assert.That(subject.Rating?.Count?.Score10, Is.EqualTo(130));
             Assert.That(subject.Rating?.Score, Is.EqualTo(7.6));
             Assert.That(subject.Collection?.OnHold, Is.EqualTo(284));
-            Assert.That(subject.AdditionalProperties, Does.ContainKey("future_field"));
         });
     }
 
