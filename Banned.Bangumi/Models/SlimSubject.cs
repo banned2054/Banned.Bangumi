@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Banned.Bangumi.Models.Subjects;
 
 namespace Banned.Bangumi.Models;
 
@@ -26,7 +27,7 @@ public partial record SlimSubject
     public string? Date { get; init; }
 
     [JsonPropertyName("images")]
-    public Images? Images { get; init; }
+    public SubjectImages? Images { get; init; }
 
     [JsonPropertyName("volumes")]
     public int? Volumes { get; init; }

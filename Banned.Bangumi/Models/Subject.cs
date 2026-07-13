@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Banned.Bangumi.Models.Subjects;
 
 namespace Banned.Bangumi.Models;
 
@@ -38,7 +39,7 @@ public partial record Subject
     public string? Platform { get; init; }
 
     [JsonPropertyName("images")]
-    public Images? Images { get; init; }
+    public SubjectImages? Images { get; init; }
 
     [JsonPropertyName("infobox")]
     public WikiV0? Infobox { get; init; }
@@ -59,7 +60,7 @@ public partial record Subject
     public Rating2? Rating { get; init; }
 
     [JsonPropertyName("collection")]
-    public Collection? Collection { get; init; }
+    public SubjectCollectionStats? Collection { get; init; }
 
     [JsonPropertyName("meta_tags")]
     public ICollection<string>? MetaTags { get; init; }

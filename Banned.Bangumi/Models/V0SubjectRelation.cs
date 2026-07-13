@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Banned.Bangumi.Models.Subjects;
 
 namespace Banned.Bangumi.Models;
 
@@ -17,7 +18,7 @@ public partial record V0SubjectRelation
     public string? NameCn { get; init; }
 
     [JsonPropertyName("images")]
-    public Images? Images { get; init; }
+    public SubjectImages? Images { get; init; }
 
     [JsonPropertyName("relation")]
     public string? Relation { get; init; }

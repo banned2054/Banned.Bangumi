@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Banned.Bangumi.Models.Subjects;
 
 namespace Banned.Bangumi.Models;
 
@@ -11,7 +12,7 @@ public partial record Rating2
     public int? Total { get; init; }
 
     [JsonPropertyName("count")]
-    public Count? Count { get; init; }
+    public SubjectRatingDistribution? Count { get; init; }
 
     [JsonPropertyName("score")]
     public double? Score { get; init; }

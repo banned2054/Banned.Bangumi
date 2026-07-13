@@ -1,8 +1,9 @@
 using System.Text.Json.Serialization;
+using Banned.Bangumi.Models.Subjects;
 
 namespace Banned.Bangumi.Models;
 
-public partial record LegacySubjectMedium : LegacySubjectSmall
+public partial record LegacySubjectMedium : LegacySubjectSummary
 {
     /// <summary>
     /// 角色信息
