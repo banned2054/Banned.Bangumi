@@ -1,13 +1,17 @@
 namespace Banned.Bangumi.Models.Enums;
 
 /// <summary>
-/// `1`, `2`, `3` 表示 `个人`, `公司`, `组合`
+/// 指定人物资源类型。<br/>
+/// Specifies a person resource type.
 /// </summary>
 public enum PersonType
 {
-    _1 = 1,
+    /// <summary>个人。 / Individual.</summary>
+    Individual = 1,
 
-    _2 = 2,
+    /// <summary>公司。 / Corporation.</summary>
+    Corporation = 2,
 
-    _3 = 3,
+    /// <summary>组合。 / Association.</summary>
+    Association = 3,
 }

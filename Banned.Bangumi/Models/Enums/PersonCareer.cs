@@ -1,28 +1,29 @@
 namespace Banned.Bangumi.Models.Enums;
 
 /// <summary>
-/// An enumeration.
+/// 指定人物职业。<br/>
+/// Specifies a person's career.
 /// </summary>
 public enum PersonCareer
 {
-    [System.Runtime.Serialization.EnumMember(Value = @"producer")]
+    /// <summary>制作人。 / Producer.</summary>
     Producer = 0,
 
-    [System.Runtime.Serialization.EnumMember(Value = @"mangaka")]
+    /// <summary>漫画家。 / Manga artist.</summary>
     Mangaka = 1,
 
-    [System.Runtime.Serialization.EnumMember(Value = @"artist")]
+    /// <summary>艺术家。 / Artist.</summary>
     Artist = 2,
 
-    [System.Runtime.Serialization.EnumMember(Value = @"seiyu")]
+    /// <summary>声优。 / Voice actor.</summary>
     Seiyu = 3,
 
-    [System.Runtime.Serialization.EnumMember(Value = @"writer")]
+    /// <summary>作家或编剧。 / Writer.</summary>
     Writer = 4,
 
-    [System.Runtime.Serialization.EnumMember(Value = @"illustrator")]
+    /// <summary>插画家。 / Illustrator.</summary>
     Illustrator = 5,
 
-    [System.Runtime.Serialization.EnumMember(Value = @"actor")]
+    /// <summary>演员。 / Actor.</summary>
     Actor = 6,
 }

@@ -2,8 +2,10 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Banned.Bangumi.Exceptions;
 using Banned.Bangumi.Models;
+using Banned.Bangumi.Models.Enums;
 
 namespace Banned.Bangumi.Services.Internal;
 
@@ -30,8 +32,18 @@ internal sealed class BangumiHttpService : IDisposable
         _accessToken = string.IsNullOrWhiteSpace(options.AccessToken) ? null : options.AccessToken;
         _timeout = options.Timeout;
         _disposeHttpClient = options.HttpClient is null;
-        _httpClient = options.HttpClient ?? new HttpClient { Timeout = Timeout.InfiniteTimeSpan };
+        _httpClient = options.HttpClient ?? new HttpClient(new HttpClientHandler
+        {
+            AllowAutoRedirect = false
+        })
+        {
+            Timeout = Timeout.InfiniteTimeSpan
+        };
         _serializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+        _serializerOptions.Converters.Add(
+            new JsonStringEnumConverter<PersonCareer>(JsonNamingPolicy.CamelCase));
+        _serializerOptions.Converters.Add(
+            new JsonStringEnumConverter<SubjectSearchSort>(JsonNamingPolicy.CamelCase));
     }
 
     internal bool OwnsHttpClient => _disposeHttpClient;
@@ -73,6 +85,40 @@ internal sealed class BangumiHttpService : IDisposable
         AuthenticationMode authenticationMode = AuthenticationMode.None,
         CancellationToken cancellationToken = default) =>
         Send<TResponse>(HttpMethod.Get, path, authenticationMode, null, cancellationToken);
+
+    internal async Task<Uri> GetRedirectUri(
+        string path,
+        AuthenticationMode authenticationMode = AuthenticationMode.None,
+        CancellationToken cancellationToken = default)
+    {
+        using var timeoutSource = CreateTimeoutSource(cancellationToken);
+        var effectiveCancellationToken = timeoutSource?.Token ?? cancellationToken;
+        var requestUri = CreateRequestUri(path);
+        using var response = await SendCore(
+            HttpMethod.Get,
+            path,
+            authenticationMode,
+            null,
+            effectiveCancellationToken,
+            allowRedirectResponse: true).ConfigureAwait(false);
+
+        if (IsRedirectStatusCode(response.StatusCode) && response.Headers.Location is { } location)
+        {
+            return location.IsAbsoluteUri ? location : new Uri(requestUri, location);
+        }
+
+        var finalRequestUri = response.RequestMessage?.RequestUri;
+        if (response.IsSuccessStatusCode &&
+            finalRequestUri is not null &&
+            finalRequestUri != requestUri)
+        {
+            return finalRequestUri;
+        }
+
+        throw new BangumiApiException(
+            "Bangumi returned an image response without a redirect target.",
+            response.StatusCode);
+    }
 
     internal async Task<TResponse> Send<TResponse>(
         HttpMethod method,
@@ -138,7 +184,8 @@ internal sealed class BangumiHttpService : IDisposable
         string path,
         AuthenticationMode authenticationMode,
         object? body,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        bool allowRedirectResponse = false)
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
         ArgumentNullException.ThrowIfNull(method);
@@ -169,7 +216,8 @@ internal sealed class BangumiHttpService : IDisposable
             HttpCompletionOption.ResponseHeadersRead,
             cancellationToken).ConfigureAwait(false);
 
-        if (response.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode ||
+            (allowRedirectResponse && IsRedirectStatusCode(response.StatusCode)))
         {
             return response;
         }
@@ -263,6 +311,14 @@ internal sealed class BangumiHttpService : IDisposable
 
         return null;
     }
+
+    private static bool IsRedirectStatusCode(HttpStatusCode statusCode) =>
+        statusCode is HttpStatusCode.MultipleChoices or
+            HttpStatusCode.MovedPermanently or
+            HttpStatusCode.Found or
+            HttpStatusCode.SeeOther or
+            HttpStatusCode.TemporaryRedirect or
+            HttpStatusCode.PermanentRedirect;
 
     private static string? BoundDiagnosticBody(string responseBody) =>
         string.IsNullOrEmpty(responseBody)

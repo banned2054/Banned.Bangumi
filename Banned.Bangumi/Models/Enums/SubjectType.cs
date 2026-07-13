@@ -1,14 +1,23 @@
 namespace Banned.Bangumi.Models.Enums;
 
+/// <summary>
+/// 指定 Bangumi 条目类型。<br/>
+/// Specifies a Bangumi subject type.
+/// </summary>
 public enum SubjectType
 {
-    _1 = 1,
+    /// <summary>书籍。 / Book.</summary>
+    Book = 1,
 
-    _2 = 2,
+    /// <summary>动画。 / Anime.</summary>
+    Anime = 2,
 
-    _3 = 3,
+    /// <summary>音乐。 / Music.</summary>
+    Music = 3,
 
-    _4 = 4,
+    /// <summary>游戏。 / Game.</summary>
+    Game = 4,
 
-    _6 = 6,
+    /// <summary>三次元。 / Live action.</summary>
+    LiveAction = 6,
 }

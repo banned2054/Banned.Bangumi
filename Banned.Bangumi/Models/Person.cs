@@ -1,35 +1,39 @@
-using Banned.Bangumi.Models.Enums;
 using System.Text.Json.Serialization;
+using Banned.Bangumi.Models.Enums;
 
 namespace Banned.Bangumi.Models;
 
-public partial record Person
+/// <summary>
+/// 表示人物概要信息。<br/>
+/// Represents summary information about a person.
+/// </summary>
+public sealed record Person
 {
+    /// <summary>获取人物 ID。<br/>Gets the person ID.</summary>
     [JsonPropertyName("id")]
-    public int? Id { get; init; }
+    public int Id { get; init; }
 
+    /// <summary>获取人物名称。<br/>Gets the person name.</summary>
     [JsonPropertyName("name")]
-    public string? Name { get; init; }
+    public string Name { get; init; } = string.Empty;
 
-    /// <summary>
-    /// `1`, `2`, `3` 表示 `个人`, `公司`, `组合`
-    /// </summary>
+    /// <summary>获取人物类型。<br/>Gets the person type.</summary>
     [JsonPropertyName("type")]
-    public int? Type { get; init; }
+    public PersonType Type { get; init; }
 
+    /// <summary>获取人物职业。<br/>Gets the person's careers.</summary>
     [JsonPropertyName("career")]
-    // TODO(system.text.json): Add ItemConverterType with enum converter when supported
-    public ICollection<PersonCareer>? Career { get; init; }
+    public IReadOnlyList<PersonCareer> Careers { get; init; } = [];
 
-    /// <summary>
-    /// object with some size of images, this object maybe `null`
-    /// </summary>
+    /// <summary>获取人物图片；无图片时为 <see langword="null"/>。<br/>Gets person images, or <see langword="null"/> when unavailable.</summary>
     [JsonPropertyName("images")]
     public PersonImages? Images { get; init; }
 
+    /// <summary>获取人物简介。<br/>Gets the short summary.</summary>
     [JsonPropertyName("short_summary")]
-    public string? ShortSummary { get; init; }
+    public string ShortSummary { get; init; } = string.Empty;
 
+    /// <summary>获取人物是否被锁定。<br/>Gets whether the person is locked.</summary>
     [JsonPropertyName("locked")]
-    public bool? Locked { get; init; }
+    public bool Locked { get; init; }
 }

@@ -1,12 +1,20 @@
 namespace Banned.Bangumi.Models.Enums;
 
+/// <summary>
+/// 指定角色资源类型。<br/>
+/// Specifies a character resource type.
+/// </summary>
 public enum CharacterType
 {
-    _1 = 1,
+    /// <summary>角色。 / Character.</summary>
+    Character = 1,
 
-    _2 = 2,
+    /// <summary>机体。 / Mechanic.</summary>
+    Mechanic = 2,
 
-    _3 = 3,
+    /// <summary>舰船。 / Ship.</summary>
+    Ship = 3,
 
-    _4 = 4,
+    /// <summary>组织。 / Organization.</summary>
+    Organization = 4,
 }

@@ -1,38 +1,39 @@
-using Banned.Bangumi.Models.Enums;
 using System.Text.Json.Serialization;
+using Banned.Bangumi.Models.Enums;
 
 namespace Banned.Bangumi.Models;
 
-public partial record RelatedPerson
+/// <summary>
+/// 表示参与条目制作的人物及其关联信息。<br/>
+/// Represents a person involved with a subject and the relationship details.
+/// </summary>
+public sealed record RelatedPerson
 {
+    /// <summary>获取人物 ID。<br/>Gets the person ID.</summary>
     [JsonPropertyName("id")]
-    public int? Id { get; init; }
+    public int Id { get; init; }
 
+    /// <summary>获取人物名称。<br/>Gets the person name.</summary>
     [JsonPropertyName("name")]
-    public string? Name { get; init; }
+    public string Name { get; init; } = string.Empty;
 
-    /// <summary>
-    /// `1`, `2`, `3` 表示 `个人`, `公司`, `组合`
-    /// </summary>
+    /// <summary>获取人物类型。<br/>Gets the person type.</summary>
     [JsonPropertyName("type")]
-    public int? Type { get; init; }
+    public PersonType Type { get; init; }
 
+    /// <summary>获取人物职业。<br/>Gets the person's careers.</summary>
     [JsonPropertyName("career")]
-    // TODO(system.text.json): Add ItemConverterType with enum converter when supported
-    public ICollection<PersonCareer>? Career { get; init; }
+    public IReadOnlyList<PersonCareer> Careers { get; init; } = [];
 
-    /// <summary>
-    /// object with some size of images, this object maybe `null`
-    /// </summary>
+    /// <summary>获取人物图片；无图片时为 <see langword="null"/>。<br/>Gets person images, or <see langword="null"/> when unavailable.</summary>
     [JsonPropertyName("images")]
     public PersonImages? Images { get; init; }
 
+    /// <summary>获取人物与条目的关系。<br/>Gets the person's relationship to the subject.</summary>
     [JsonPropertyName("relation")]
-    public string? Relation { get; init; }
+    public string Relation { get; init; } = string.Empty;
 
-    /// <summary>
-    /// 参与章节/曲目
-    /// </summary>
+    /// <summary>获取参与的章节或曲目。<br/>Gets the involved episodes or tracks.</summary>
     [JsonPropertyName("eps")]
-    public string? Eps { get; init; }
+    public string Episodes { get; init; } = string.Empty;
 }
