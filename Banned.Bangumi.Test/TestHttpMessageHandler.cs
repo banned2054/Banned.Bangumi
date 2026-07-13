@@ -16,9 +16,8 @@ internal sealed class TestHttpMessageHandler : HttpMessageHandler
 
     internal bool IsDisposed { get; private set; }
 
-    protected override async Task<HttpResponseMessage> SendAsync(
-        HttpRequestMessage request,
-        CancellationToken cancellationToken)
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+                                                                 CancellationToken  cancellationToken)
     {
         Requests.Enqueue(await CapturedRequest.Create(request, cancellationToken).ConfigureAwait(false));
         return await _responseFactory(request, cancellationToken).ConfigureAwait(false);
@@ -33,26 +32,22 @@ internal sealed class TestHttpMessageHandler : HttpMessageHandler
 
 internal sealed record CapturedRequest(
     HttpMethod Method,
-    Uri Uri,
-    string? UserAgent,
-    string? Authorization,
-    string? ContentType,
-    string? Body)
+    Uri        Uri,
+    string?    UserAgent,
+    string?    Authorization,
+    string?    ContentType,
+    string?    Body)
 {
-    internal static async Task<CapturedRequest> Create(
-        HttpRequestMessage request,
-        CancellationToken cancellationToken)
+    internal static async Task<CapturedRequest> Create(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         var body = request.Content is null
             ? null
             : await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
-        return new CapturedRequest(
-            request.Method,
-            request.RequestUri!,
-            request.Headers.UserAgent.ToString(),
-            request.Headers.Authorization?.ToString(),
-            request.Content?.Headers.ContentType?.ToString(),
-            body);
+        return new CapturedRequest(request.Method, request.RequestUri!,
+                                   request.Headers.UserAgent.ToString(),
+                                   request.Headers.Authorization?.ToString(),
+                                   request.Content?.Headers.ContentType?.ToString(),
+                                   body);
     }
 }

@@ -1,6 +1,6 @@
+using Banned.Bangumi.Models.Enums;
 using System.Net;
 using System.Text;
-using Banned.Bangumi.Models.Enums;
 
 namespace Banned.Bangumi.Test;
 
@@ -31,23 +31,25 @@ public sealed class CalendarServiceTests
             ]
             """;
         var handler = new TestHttpMessageHandler((_, _) => Task.FromResult(
-            new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(responseJson, Encoding.UTF8, "application/json")
-            }));
+                                                                           new HttpResponseMessage(HttpStatusCode.OK)
+                                                                           {
+                                                                               Content = new StringContent(responseJson,
+                                                                                        Encoding.UTF8,
+                                                                                        "application/json")
+                                                                           }));
         using var httpClient = new HttpClient(handler);
         using var client = new BangumiClient(new BangumiClientOptions
         {
             BaseAddress = new Uri("https://api.example/root"),
             AccessToken = "must-not-be-sent",
-            UserAgent = "Banned.Bangumi.Test/1.0",
-            HttpClient = httpClient
+            UserAgent   = "Banned.Bangumi.Test/1.0",
+            HttpClient  = httpClient
         });
 
         var calendar = await client.Calendar.Get();
 
         Assert.That(handler.Requests.TryDequeue(out var request), Is.True);
-        var day = calendar.Single();
+        var day     = calendar.Single();
         var subject = day.Items.Single();
         Assert.Multiple(() =>
         {
@@ -75,14 +77,14 @@ public sealed class CalendarServiceTests
         using var httpClient = new HttpClient(handler);
         using var client = new BangumiClient(new BangumiClientOptions
         {
-            UserAgent = "Banned.Bangumi.Test/1.0",
+            UserAgent  = "Banned.Bangumi.Test/1.0",
             HttpClient = httpClient
         });
         using var cancellationSource = new CancellationTokenSource();
         cancellationSource.Cancel();
 
         Assert.That(
-            async () => await client.Calendar.Get(cancellationSource.Token),
-            Throws.InstanceOf<OperationCanceledException>());
+                    async () => await client.Calendar.Get(cancellationSource.Token),
+                    Throws.InstanceOf<OperationCanceledException>());
     }
 }

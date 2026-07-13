@@ -1,6 +1,6 @@
-using System.Text.Json;
 using Banned.Bangumi.Models.Calendar;
 using Banned.Bangumi.Models.Enums;
+using System.Text.Json;
 
 namespace Banned.Bangumi.Test;
 
@@ -52,8 +52,8 @@ public sealed class CalendarModelTests
             """;
 
         var calendar = JsonSerializer.Deserialize<IReadOnlyList<CalendarDay>>(json);
-        var day = calendar!.Single();
-        var subject = day.Items.Single();
+        var day      = calendar!.Single();
+        var subject  = day.Items.Single();
 
         Assert.Multiple(() =>
         {

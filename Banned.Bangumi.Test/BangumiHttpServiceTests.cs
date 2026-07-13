@@ -1,8 +1,8 @@
+using Banned.Bangumi.Exceptions;
+using Banned.Bangumi.Services.Internal;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
-using Banned.Bangumi.Exceptions;
-using Banned.Bangumi.Services.Internal;
 
 namespace Banned.Bangumi.Test;
 
@@ -12,37 +12,29 @@ public sealed class BangumiHttpServiceTests
     [Test]
     public void AddQueryString_EncodesValuesAndOmitsNulls()
     {
-        var path = BangumiHttpService.AddQueryString(
-            "/v0/subjects?limit=20",
-            new Dictionary<string, string?>
-            {
-                ["tag"] = "科幻 / SF",
-                ["empty"] = string.Empty,
-                ["omitted"] = null
-            });
+        var path = BangumiHttpService.AddQueryString("/v0/subjects?limit=20",
+                                                     new Dictionary<string, string?>
+                                                     {
+                                                         ["tag"]     = "科幻 / SF",
+                                                         ["empty"]   = string.Empty,
+                                                         ["omitted"] = null
+                                                     });
 
-        Assert.That(
-            path,
-            Is.EqualTo("/v0/subjects?limit=20&tag=%E7%A7%91%E5%B9%BB%20%2F%20SF&empty="));
+        Assert.That(path, Is.EqualTo("/v0/subjects?limit=20&tag=%E7%A7%91%E5%B9%BB%20%2F%20SF&empty="));
     }
 
     [Test]
     public async Task Send_AddsPerRequestHeadersAndSerializesBodyWithoutMutatingHttpClient()
     {
-        var handler = CreateJsonHandler("{\"value\":\"response\"}");
-        using var httpClient = new HttpClient(handler)
-        {
-            BaseAddress = new Uri("https://caller.example/"),
-            Timeout = TimeSpan.FromSeconds(11)
-        };
+        var       handler    = CreateJsonHandler("{\"value\":\"response\"}");
+        using var httpClient = new HttpClient(handler);
+        httpClient.BaseAddress = new Uri("https://caller.example/");
+        httpClient.Timeout     = TimeSpan.FromSeconds(11);
         httpClient.DefaultRequestHeaders.Add("X-Caller", "preserved");
-        var service = CreateService(handler, httpClient, accessToken: "secret-token");
+        var service = CreateService(handler, httpClient, accessToken : "secret-token");
 
-        var result = await service.Send<TestPayload>(
-            HttpMethod.Post,
-            "/v0/test?offset=2",
-            AuthenticationMode.Optional,
-            new TestPayload("request"));
+        var result = await service.Send<TestPayload>(HttpMethod.Post, "/v0/test?offset=2", AuthenticationMode.Optional,
+                                                     new TestPayload("request"));
 
         Assert.That(handler.Requests.TryDequeue(out var request), Is.True);
         Assert.Multiple(() =>
@@ -65,21 +57,13 @@ public sealed class BangumiHttpServiceTests
     [Test]
     public async Task Send_RespectsNoneOptionalAndRequiredAuthenticationModes()
     {
-        var authenticatedHandler = CreateJsonHandler("{}");
-        using var authenticatedClient = new HttpClient(authenticatedHandler);
-        using var authenticatedService = CreateService(
-            authenticatedHandler,
-            authenticatedClient,
-            accessToken: "secret-token");
+        var       authenticatedHandler = CreateJsonHandler("{}");
+        using var authenticatedClient  = new HttpClient(authenticatedHandler);
+        using var authenticatedService =
+            CreateService(authenticatedHandler, authenticatedClient, accessToken : "secret-token");
 
-        await authenticatedService.Send(
-            HttpMethod.Get,
-            "/none",
-            AuthenticationMode.None);
-        await authenticatedService.Send(
-            HttpMethod.Get,
-            "/required",
-            AuthenticationMode.Required);
+        await authenticatedService.Send(HttpMethod.Get, "/none", AuthenticationMode.None);
+        await authenticatedService.Send(HttpMethod.Get, "/required", AuthenticationMode.Required);
 
         var requests = authenticatedHandler.Requests.ToArray();
         Assert.Multiple(() =>
@@ -88,39 +72,31 @@ public sealed class BangumiHttpServiceTests
             Assert.That(requests[1].Authorization, Is.EqualTo("Bearer secret-token"));
         });
 
-        var anonymousHandler = CreateJsonHandler("{}");
-        using var anonymousClient = new HttpClient(anonymousHandler);
+        var       anonymousHandler = CreateJsonHandler("{}");
+        using var anonymousClient  = new HttpClient(anonymousHandler);
         using var anonymousService = CreateService(anonymousHandler, anonymousClient);
 
-        await anonymousService.Send(
-            HttpMethod.Get,
-            "/optional",
-            AuthenticationMode.Optional);
+        await anonymousService.Send(HttpMethod.Get, "/optional", AuthenticationMode.Optional);
 
         Assert.That(anonymousHandler.Requests.Single().Authorization, Is.Null);
-        Assert.That(
-            async () => await anonymousService.Send(
-                HttpMethod.Get,
-                "/required",
-                AuthenticationMode.Required),
-            Throws.TypeOf<BangumiAuthenticationException>());
+        Assert.That(async () => await anonymousService.Send(HttpMethod.Get, "/required", AuthenticationMode.Required),
+                    Throws.TypeOf<BangumiAuthenticationException>());
         Assert.That(anonymousHandler.Requests, Has.Count.EqualTo(1));
     }
 
     [Test]
     public void Send_MapsAuthenticationErrorAndDeserializesErrorBody()
     {
-        var handler = CreateJsonHandler(
-            "{\"title\":\"Unauthorized\",\"description\":\"Token expired\",\"details\":\"renew it\"}",
-            HttpStatusCode.Unauthorized);
+        var handler =
+            CreateJsonHandler("{\"title\":\"Unauthorized\",\"description\":\"Token expired\",\"details\":\"renew it\"}",
+                              HttpStatusCode.Unauthorized);
         using var httpClient = new HttpClient(handler);
-        using var service = CreateService(handler, httpClient, accessToken: "secret-token");
+        using var service    = CreateService(handler, httpClient, accessToken : "secret-token");
 
-        var exception = Assert.ThrowsAsync<BangumiAuthenticationException>(async () =>
-            await service.Send(
-                HttpMethod.Get,
-                "/private",
-                AuthenticationMode.Required));
+        var exception =
+            Assert.ThrowsAsync<BangumiAuthenticationException>(async () => await service.Send(HttpMethod.Get,
+                                                                        "/private",
+                                                                        AuthenticationMode.Required));
 
         Assert.Multiple(() =>
         {
@@ -146,13 +122,12 @@ public sealed class BangumiHttpServiceTests
             return Task.FromResult(response);
         });
         using var httpClient = new HttpClient(handler);
-        using var service = CreateService(handler, httpClient);
+        using var service    = CreateService(handler, httpClient);
 
-        var exception = Assert.ThrowsAsync<BangumiRateLimitException>(async () =>
-            await service.Send(
-                HttpMethod.Get,
-                "/limited",
-                AuthenticationMode.None));
+        var exception =
+            Assert.ThrowsAsync<BangumiRateLimitException>(async () =>
+                                                              await service.Send(HttpMethod.Get, "/limited",
+                                                                       AuthenticationMode.None));
 
         Assert.Multiple(() =>
         {
@@ -165,15 +140,14 @@ public sealed class BangumiHttpServiceTests
     [Test]
     public void Send_MapsMalformedErrorWithoutLosingDiagnosticBody()
     {
-        var handler = CreateJsonHandler("upstream failed", HttpStatusCode.BadGateway);
+        var       handler    = CreateJsonHandler("upstream failed", HttpStatusCode.BadGateway);
         using var httpClient = new HttpClient(handler);
-        using var service = CreateService(handler, httpClient);
+        using var service    = CreateService(handler, httpClient);
 
-        var exception = Assert.ThrowsAsync<BangumiApiException>(async () =>
-            await service.Send(
-                HttpMethod.Get,
-                "/failed",
-                AuthenticationMode.None));
+        var exception =
+            Assert.ThrowsAsync<BangumiApiException>(async () =>
+                                                        await service.Send(HttpMethod.Get, "/failed",
+                                                                           AuthenticationMode.None));
 
         Assert.Multiple(() =>
         {
@@ -186,12 +160,12 @@ public sealed class BangumiHttpServiceTests
     [Test]
     public void Get_MapsInvalidSuccessJsonToApiException()
     {
-        var handler = CreateJsonHandler("not-json");
+        var       handler    = CreateJsonHandler("not-json");
         using var httpClient = new HttpClient(handler);
-        using var service = CreateService(handler, httpClient);
+        using var service    = CreateService(handler, httpClient);
 
-        var exception = Assert.ThrowsAsync<BangumiApiException>(async () =>
-            await service.Get<TestPayload>("/invalid-json"));
+        var exception =
+            Assert.ThrowsAsync<BangumiApiException>(async () => await service.Get<TestPayload>("/invalid-json"));
 
         Assert.Multiple(() =>
         {
@@ -209,18 +183,14 @@ public sealed class BangumiHttpServiceTests
             await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);
             throw new InvalidOperationException("The delay should have been cancelled.");
         });
-        using var httpClient = new HttpClient(handler);
-        using var service = CreateService(handler, httpClient);
+        using var httpClient         = new HttpClient(handler);
+        using var service            = CreateService(handler, httpClient);
         using var cancellationSource = new CancellationTokenSource();
         cancellationSource.Cancel();
 
-        Assert.That(
-            async () => await service.Send(
-                HttpMethod.Get,
-                "/cancelled",
-                AuthenticationMode.None,
-                cancellationToken: cancellationSource.Token),
-            Throws.InstanceOf<OperationCanceledException>());
+        Assert.That(async () => await service.Send(HttpMethod.Get, "/cancelled", AuthenticationMode.None,
+                                                   cancellationToken : cancellationSource.Token),
+                    Throws.InstanceOf<OperationCanceledException>());
     }
 
     [Test]
@@ -238,22 +208,18 @@ public sealed class BangumiHttpServiceTests
         using var service = new BangumiHttpService(new BangumiClientOptions
         {
             BaseAddress = new Uri("https://api.example"),
-            UserAgent = "Banned.Bangumi.Test/1.0",
-            HttpClient = httpClient,
-            Timeout = TimeSpan.FromMilliseconds(50)
+            UserAgent   = "Banned.Bangumi.Test/1.0",
+            HttpClient  = httpClient,
+            Timeout     = TimeSpan.FromMilliseconds(50)
         });
 
-        Assert.That(
-            async () => await service.Send(
-                HttpMethod.Get,
-                "/timeout",
-                AuthenticationMode.None),
-            Throws.InstanceOf<OperationCanceledException>());
+        Assert.That(async () => await service.Send(HttpMethod.Get, "/timeout", AuthenticationMode.None),
+                    Throws.InstanceOf<OperationCanceledException>());
         Assert.That(httpClient.Timeout, Is.EqualTo(TimeSpan.FromMinutes(3)));
     }
 
     private static TestHttpMessageHandler CreateJsonHandler(
-        string json,
+        string         json,
         HttpStatusCode statusCode = HttpStatusCode.OK) =>
         new((_, _) => Task.FromResult(new HttpResponseMessage(statusCode)
         {
@@ -262,8 +228,8 @@ public sealed class BangumiHttpServiceTests
 
     private static BangumiHttpService CreateService(
         TestHttpMessageHandler handler,
-        HttpClient httpClient,
-        string? accessToken = null)
+        HttpClient             httpClient,
+        string?                accessToken = null)
     {
         Assert.That(httpClient, Is.Not.Null);
         Assert.That(handler, Is.Not.Null);
@@ -272,9 +238,9 @@ public sealed class BangumiHttpServiceTests
         {
             BaseAddress = new Uri("https://api.example/root"),
             AccessToken = accessToken,
-            UserAgent = "Banned.Bangumi.Test/1.0",
-            HttpClient = httpClient,
-            Timeout = TimeSpan.FromSeconds(5)
+            UserAgent   = "Banned.Bangumi.Test/1.0",
+            HttpClient  = httpClient,
+            Timeout     = TimeSpan.FromSeconds(5)
         });
     }
 

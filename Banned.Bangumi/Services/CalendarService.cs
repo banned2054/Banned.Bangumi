@@ -25,10 +25,7 @@ public sealed class CalendarService
     /// </returns>
     /// <exception cref="BangumiApiException">API 返回错误或响应无法解析。 / The API returns an error or the response cannot be parsed.</exception>
     /// <exception cref="OperationCanceledException">请求被取消或超时。 / The request is cancelled or times out.</exception>
-    public async Task<IReadOnlyList<CalendarDay>> Get(
-        CancellationToken cancellationToken = default) =>
-        await HttpService.Get<IReadOnlyList<CalendarDay>>(
-            "/calendar",
-            AuthenticationMode.None,
-            cancellationToken).ConfigureAwait(false);
+    public async Task<IReadOnlyList<CalendarDay>> Get(CancellationToken cancellationToken = default) =>
+        await HttpService.Get<IReadOnlyList<CalendarDay>>("/calendar", AuthenticationMode.None, cancellationToken)
+                         .ConfigureAwait(false);
 }

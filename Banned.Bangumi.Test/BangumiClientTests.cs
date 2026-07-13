@@ -37,8 +37,8 @@ public sealed class BangumiClientTests
         var options = new BangumiClientOptions { UserAgent = userAgent };
 
         Assert.That(
-            () => new BangumiClient(options),
-            Throws.TypeOf<ArgumentException>());
+                    () => new BangumiClient(options),
+                    Throws.TypeOf<ArgumentException>());
     }
 
     [Test]
@@ -47,12 +47,12 @@ public sealed class BangumiClientTests
         var invalidAddress = new BangumiClientOptions
         {
             BaseAddress = new Uri("file:///tmp/bangumi"),
-            UserAgent = "Banned.Bangumi.Test/1.0"
+            UserAgent   = "Banned.Bangumi.Test/1.0"
         };
         var invalidTimeout = new BangumiClientOptions
         {
             UserAgent = "Banned.Bangumi.Test/1.0",
-            Timeout = TimeSpan.Zero
+            Timeout   = TimeSpan.Zero
         };
 
         Assert.Multiple(() =>
@@ -72,7 +72,7 @@ public sealed class BangumiClientTests
         using var httpClient = new HttpClient(handler);
         var client = new BangumiClient(new BangumiClientOptions
         {
-            UserAgent = "Banned.Bangumi.Test/1.0",
+            UserAgent  = "Banned.Bangumi.Test/1.0",
             HttpClient = httpClient
         });
 
@@ -97,11 +97,7 @@ public sealed class BangumiClientTests
         Assert.That(service.OwnsHttpClient, Is.True);
         service.Dispose();
 
-        Assert.That(
-            async () => await service.Send(
-                HttpMethod.Get,
-                "/test",
-                AuthenticationMode.None),
-            Throws.TypeOf<ObjectDisposedException>());
+        Assert.That(async () => await service.Send(HttpMethod.Get, "/test", AuthenticationMode.None),
+                    Throws.TypeOf<ObjectDisposedException>());
     }
 }
