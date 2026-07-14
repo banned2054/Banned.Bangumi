@@ -1,22 +1,35 @@
 namespace Banned.Bangumi.Models.Users;
 
+/// <summary>
+/// 指定用户组。<br/>
+/// Specifies a user group.
+/// </summary>
 public enum UserGroup
 {
-    _1 = 1,
+    /// <summary>管理员。 / Administrator.</summary>
+    Admin = 1,
 
-    _2 = 2,
+    /// <summary>Bangumi 管理猿。 / Bangumi administrator.</summary>
+    BangumiAdmin = 2,
 
-    _3 = 3,
+    /// <summary>天窗管理猿。 / Doujin administrator.</summary>
+    DoujinAdmin = 3,
 
-    _4 = 4,
+    /// <summary>禁言用户。 / Muted user.</summary>
+    MutedUser = 4,
 
-    _5 = 5,
+    /// <summary>禁止访问用户。 / Blocked user.</summary>
+    BlockedUser = 5,
 
-    _8 = 8,
+    /// <summary>人物管理猿。 / Person administrator.</summary>
+    PersonAdmin = 8,
 
-    _9 = 9,
+    /// <summary>维基条目管理猿。 / Wiki administrator.</summary>
+    WikiAdmin = 9,
 
-    _10 = 10,
+    /// <summary>普通用户。 / Regular user.</summary>
+    User = 10,
 
-    _11 = 11,
+    /// <summary>维基人。 / Wiki contributor.</summary>
+    WikiUser = 11,
 }

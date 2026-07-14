@@ -43,5 +43,5 @@ public partial record LegacyUser
     public string? Sign { get; init; }
 
     [JsonPropertyName("usergroup")]
-    public LegacyUserGroup? UserGroup { get; init; }
+    public UserGroup? UserGroup { get; init; }
 }
