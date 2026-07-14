@@ -28,7 +28,7 @@ public record LegacySubjectSummary
     /// Gets the subject type.
     /// </summary>
     [JsonPropertyName("type")]
-    public LegacySubjectType? Type { get; init; }
+    public SubjectType? Type { get; init; }
 
     /// <summary>
     /// 获取条目原名。<br/>

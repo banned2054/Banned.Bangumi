@@ -61,7 +61,7 @@ public sealed class CalendarServiceTests
             Assert.That(day.Weekday?.Id, Is.EqualTo(1));
             Assert.That(day.Weekday?.Chinese, Is.EqualTo("星期一"));
             Assert.That(subject.Id, Is.EqualTo(12));
-            Assert.That(subject.Type, Is.EqualTo(LegacySubjectType.Anime));
+            Assert.That(subject.Type, Is.EqualTo(SubjectType.Anime));
             Assert.That(subject.NameCn, Is.EqualTo("人形电脑天使心"));
         });
     }

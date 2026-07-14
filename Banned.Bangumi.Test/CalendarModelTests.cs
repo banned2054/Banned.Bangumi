@@ -1,4 +1,6 @@
+using Banned.Bangumi.Models;
 using Banned.Bangumi.Models.Calendar;
+using Banned.Bangumi.Models.Episodes;
 using Banned.Bangumi.Models.Subjects;
 using System.Text.Json;
 
@@ -62,7 +64,7 @@ public sealed class CalendarModelTests
             Assert.That(day.Weekday?.Japanese, Is.EqualTo("月曜日"));
             Assert.That(day.Weekday?.Id, Is.EqualTo(1));
             Assert.That(subject.Id, Is.EqualTo(12));
-            Assert.That(subject.Type, Is.EqualTo(LegacySubjectType.Anime));
+            Assert.That(subject.Type, Is.EqualTo(SubjectType.Anime));
             Assert.That(subject.NameCn, Is.EqualTo("人形电脑天使心"));
             Assert.That(subject.Eps, Is.EqualTo(27));
             Assert.That(subject.EpsCount, Is.EqualTo(27));
@@ -81,5 +83,13 @@ public sealed class CalendarModelTests
         var day = JsonSerializer.Deserialize<CalendarDay>("{\"weekday\":{\"id\":1}}");
 
         Assert.That(day!.Items, Is.Empty);
+    }
+
+    [Test]
+    public void LegacyEpisode_DeserializesSharedEpisodeType()
+    {
+        var episode = JsonSerializer.Deserialize<LegacyEpisode>("{\"id\":1,\"type\":4}");
+
+        Assert.That(episode!.Type, Is.EqualTo(EpisodeType.PromotionalVideo));
     }
 }
