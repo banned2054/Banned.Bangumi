@@ -1,12 +1,12 @@
 using System.Text.Json.Serialization;
 
-namespace Banned.Bangumi.Models.Subjects;
+namespace Banned.Bangumi.Models.Common;
 
 /// <summary>
 /// 表示条目标签及其使用次数。<br/>
 /// Represents a subject tag and its usage count.
 /// </summary>
-public sealed record SubjectTag
+public sealed record Tag
 {
     /// <summary>获取标签名称。<br/>Gets the tag name.</summary>
     [JsonPropertyName("name")]

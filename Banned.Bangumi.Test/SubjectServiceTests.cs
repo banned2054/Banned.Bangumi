@@ -99,6 +99,8 @@ public sealed class SubjectServiceTests
             Assert.That(subject.Rating.Count.Score10, Is.EqualTo(50));
             Assert.That(subject.Collection.OnHold, Is.EqualTo(4));
             Assert.That(subject.Tags.Single().Name, Is.EqualTo("科幻"));
+            Assert.That(subject.Tags.Single().Count, Is.EqualTo(9));
+            Assert.That(subject.Tags.Single(), Is.TypeOf<Tag>());
             Assert.That(subject.Infobox!.Single().Value.GetString(), Is.EqualTo("示例"));
         });
     }

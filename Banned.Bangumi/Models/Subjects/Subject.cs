@@ -89,5 +89,5 @@ public sealed record Subject
 
     /// <summary>获取用户标签及其使用次数。<br/>Gets user tags and their usage counts.</summary>
     [JsonPropertyName("tags")]
-    public IReadOnlyList<SubjectTag> Tags { get; init; } = [];
+    public IReadOnlyList<Tag> Tags { get; init; } = [];
 }
