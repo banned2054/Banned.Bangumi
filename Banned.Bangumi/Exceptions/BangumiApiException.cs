@@ -10,15 +10,15 @@ namespace Banned.Bangumi.Exceptions;
 public class BangumiApiException : Exception
 {
     internal BangumiApiException(
-        string message,
-        HttpStatusCode? statusCode = null,
-        ErrorDetail? error = null,
-        string? responseBody = null,
-        Exception? innerException = null)
+        string          message,
+        HttpStatusCode? statusCode     = null,
+        ErrorDetail?    error          = null,
+        string?         responseBody   = null,
+        Exception?      innerException = null)
         : base(message, innerException)
     {
-        StatusCode = statusCode;
-        Error = error;
+        StatusCode   = statusCode;
+        Error        = error;
         ResponseBody = responseBody;
     }
 

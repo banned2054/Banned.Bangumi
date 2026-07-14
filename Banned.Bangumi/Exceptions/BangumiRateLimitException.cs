@@ -1,5 +1,5 @@
-using System.Net;
 using Banned.Bangumi.Models.Common;
+using System.Net;
 
 namespace Banned.Bangumi.Exceptions;
 
@@ -10,11 +10,11 @@ namespace Banned.Bangumi.Exceptions;
 public sealed class BangumiRateLimitException : BangumiApiException
 {
     internal BangumiRateLimitException(
-        string message,
+        string         message,
         HttpStatusCode statusCode,
-        ErrorDetail? error,
-        string? responseBody,
-        TimeSpan? retryAfter)
+        ErrorDetail?   error,
+        string?        responseBody,
+        TimeSpan?      retryAfter)
         : base(message, statusCode, error, responseBody)
     {
         RetryAfter = retryAfter;

@@ -1,5 +1,5 @@
-using System.Net;
 using Banned.Bangumi.Models.Common;
+using System.Net;
 
 namespace Banned.Bangumi.Exceptions;
 
@@ -10,10 +10,10 @@ namespace Banned.Bangumi.Exceptions;
 public sealed class BangumiAuthenticationException : BangumiApiException
 {
     internal BangumiAuthenticationException(
-        string message,
-        HttpStatusCode? statusCode = null,
-        ErrorDetail? error = null,
-        string? responseBody = null)
+        string          message,
+        HttpStatusCode? statusCode   = null,
+        ErrorDetail?    error        = null,
+        string?         responseBody = null)
         : base(message, statusCode, error, responseBody)
     {
     }
