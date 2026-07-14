@@ -1,3 +1,4 @@
+using Banned.Bangumi.Models.Common;
 using Banned.Bangumi.Models.Users;
 using System.Text.Json.Serialization;
 
@@ -33,7 +34,7 @@ public partial record LegacyUser
     /// 头像地址
     /// </summary>
     [JsonPropertyName("avatar")]
-    public Avatar? Avatar { get; init; }
+    public Images? Avatar { get; init; }
 
     /// <summary>
     /// 签名

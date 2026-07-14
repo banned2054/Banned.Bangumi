@@ -4,6 +4,7 @@ using System.Text.Json;
 using Banned.Bangumi.Exceptions;
 using Banned.Bangumi.Models.Characters;
 using Banned.Bangumi.Models.Persons;
+using Banned.Bangumi.Models.Common;
 using Banned.Bangumi.Models.Subjects;
 
 namespace Banned.Bangumi.Test;
@@ -170,7 +171,7 @@ public sealed class SubjectServiceTests
         using var httpClient = new HttpClient(handler);
         using var client = CreateClient(httpClient, accessToken: "optional-token");
 
-        var result = await client.Subjects.GetImageUri(42, SubjectImageSize.Large);
+        var result = await client.Subjects.GetImageUri(42, ImageSize.Large);
 
         Assert.That(handler.Requests.TryDequeue(out var request), Is.True);
         Assert.Multiple(() =>

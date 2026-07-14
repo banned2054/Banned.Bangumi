@@ -45,11 +45,10 @@ public sealed class CharacterService
     /// <exception cref="ArgumentOutOfRangeException">角色 ID 或图片尺寸无效。 / The character ID or image size is invalid.</exception>
     /// <exception cref="BangumiApiException">API 返回错误或未返回重定向目标。 / The API returns an error or does not return a redirect target.</exception>
     /// <exception cref="OperationCanceledException">请求被取消或超时。 / The request is cancelled or times out.</exception>
-    public async Task<Uri> GetImageUri(int               characterId, CharacterImageSize size,
-                                       CancellationToken cancellationToken = default)
+    public async Task<Uri> GetImageUri(int characterId, ImageSize size, CancellationToken cancellationToken = default)
     {
         ValidateCharacterId(characterId);
-        if (!Enum.IsDefined(size))
+        if (!Enum.IsDefined(size) || size == ImageSize.Common)
         {
             throw new ArgumentOutOfRangeException(nameof(size), size, "The image size is invalid.");
         }

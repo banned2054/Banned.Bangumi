@@ -1,3 +1,4 @@
+using Banned.Bangumi.Models.Common;
 using System.Text.Json.Serialization;
 
 namespace Banned.Bangumi.Models.Subjects;
@@ -26,7 +27,7 @@ public sealed record SubjectRelation
 
     /// <summary>获取关联条目的图片。<br/>Gets images for the related subject.</summary>
     [JsonPropertyName("images")]
-    public SubjectImages? Images { get; init; }
+    public Images? Images { get; init; }
 
     /// <summary>获取两个条目之间的关系。<br/>Gets the relationship between the subjects.</summary>
     [JsonPropertyName("relation")]

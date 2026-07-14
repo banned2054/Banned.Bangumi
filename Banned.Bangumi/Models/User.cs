@@ -1,3 +1,4 @@
+using Banned.Bangumi.Models.Common;
 using Banned.Bangumi.Models.Users;
 using System.Text.Json.Serialization;
 
@@ -18,7 +19,7 @@ public partial record User
     public UserGroup? UserGroup { get; init; }
 
     [JsonPropertyName("avatar")]
-    public Avatar? Avatar { get; init; }
+    public Images? Avatar { get; init; }
 
     /// <summary>
     /// 个人签名

@@ -1,11 +1,11 @@
 using Banned.Bangumi.Models.Subjects;
 using System.Text.Json.Serialization;
 
-namespace Banned.Bangumi.Models.Characters;
+namespace Banned.Bangumi.Models.Common;
 
 /// <summary>
-/// 表示与角色关联的条目。<br/>
-/// Represents a subject related to a character.
+/// 表示与其他资源关联的条目。<br/>
+/// Represents a subject related to another resource.
 /// </summary>
 public sealed record RelatedSubject
 {

@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Banned.Bangumi.Models.Common;
 using Banned.Bangumi.Models.Subjects;
 
 namespace Banned.Bangumi.Models;
@@ -15,7 +16,7 @@ public partial record IndexSubject
     public string? Name { get; init; }
 
     [JsonPropertyName("images")]
-    public SubjectImages? Images { get; init; }
+    public Images? Images { get; init; }
 
     [JsonPropertyName("infobox")]
     public WikiV0? Infobox { get; init; }

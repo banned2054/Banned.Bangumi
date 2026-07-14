@@ -1,3 +1,4 @@
+using Banned.Bangumi.Models.Common;
 using System.Text.Json.Serialization;
 
 namespace Banned.Bangumi.Models.Subjects;
@@ -69,7 +70,7 @@ public record LegacySubjectSummary
     /// Gets the subject cover images.
     /// </summary>
     [JsonPropertyName("images")]
-    public SubjectImages? Images { get; init; }
+    public Images? Images { get; init; }
 
     /// <summary>
     /// 获取话数。<br/>

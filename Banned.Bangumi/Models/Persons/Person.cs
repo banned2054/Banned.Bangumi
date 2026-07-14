@@ -1,3 +1,4 @@
+using Banned.Bangumi.Models.Common;
 using System.Text.Json.Serialization;
 
 namespace Banned.Bangumi.Models.Persons;
@@ -26,7 +27,7 @@ public sealed record Person
 
     /// <summary>获取人物图片；无图片时为 <see langword="null"/>。<br/>Gets person images, or <see langword="null"/> when unavailable.</summary>
     [JsonPropertyName("images")]
-    public PersonImages? Images { get; init; }
+    public Images? Images { get; init; }
 
     /// <summary>获取人物简介。<br/>Gets the short summary.</summary>
     [JsonPropertyName("short_summary")]

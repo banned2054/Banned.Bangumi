@@ -81,8 +81,7 @@ public sealed class SubjectService
     /// <exception cref="ArgumentOutOfRangeException">条目 ID 或图片尺寸无效。 / The subject ID or image size is invalid.</exception>
     /// <exception cref="BangumiApiException">API 返回错误或未返回重定向目标。 / The API returns an error or does not return a redirect target.</exception>
     /// <exception cref="OperationCanceledException">请求被取消或超时。 / The request is cancelled or times out.</exception>
-    public async Task<Uri> GetImageUri(int               subjectId, SubjectImageSize size,
-                                       CancellationToken cancellationToken = default)
+    public async Task<Uri> GetImageUri(int subjectId, ImageSize size, CancellationToken cancellationToken = default)
     {
         ValidateSubjectId(subjectId);
         if (!Enum.IsDefined(size))

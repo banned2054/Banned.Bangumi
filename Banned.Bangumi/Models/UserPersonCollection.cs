@@ -1,3 +1,4 @@
+using Banned.Bangumi.Models.Common;
 using Banned.Bangumi.Models.Persons;
 using System.Text.Json.Serialization;
 
@@ -25,7 +26,7 @@ public partial record UserPersonCollection
     /// object with some size of images, this object maybe `null`
     /// </summary>
     [JsonPropertyName("images")]
-    public PersonImages? Images { get; init; }
+    public Images? Images { get; init; }
 
     [JsonPropertyName("created_at")]
     public System.DateTimeOffset? CreatedAt { get; init; }

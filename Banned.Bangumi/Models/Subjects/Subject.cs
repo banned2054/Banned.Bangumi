@@ -1,3 +1,4 @@
+using Banned.Bangumi.Models.Common;
 using System.Text.Json.Serialization;
 
 namespace Banned.Bangumi.Models.Subjects;
@@ -53,7 +54,7 @@ public sealed record Subject
 
     /// <summary>获取不同尺寸的条目图片。<br/>Gets subject images in different sizes.</summary>
     [JsonPropertyName("images")]
-    public SubjectImages Images { get; init; } = new();
+    public Images Images { get; init; } = new();
 
     /// <summary>获取条目信息框；API 未提供时为 <see langword="null"/>。<br/>Gets the subject infobox, or <see langword="null"/> when the API does not provide one.</summary>
     [JsonPropertyName("infobox")]

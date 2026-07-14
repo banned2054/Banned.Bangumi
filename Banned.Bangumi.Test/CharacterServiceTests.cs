@@ -76,7 +76,7 @@ public sealed class CharacterServiceTests
         using var httpClient = new HttpClient(handler);
         using var client     = CreateClient(httpClient, accessToken : "optional-token");
 
-        var result = await client.Characters.GetImageUri(8, CharacterImageSize.Large);
+        var result = await client.Characters.GetImageUri(8, ImageSize.Large);
 
         Assert.That(handler.Requests.TryDequeue(out var request), Is.True);
         Assert.Multiple(() =>
@@ -221,7 +221,9 @@ public sealed class CharacterServiceTests
         {
             Assert.That(async () => await client.Characters.Get(0),
                         Throws.TypeOf<ArgumentOutOfRangeException>());
-            Assert.That(async () => await client.Characters.GetImageUri(8, (CharacterImageSize)999),
+            Assert.That(async () => await client.Characters.GetImageUri(8, (ImageSize)999),
+                        Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(async () => await client.Characters.GetImageUri(8, ImageSize.Common),
                         Throws.TypeOf<ArgumentOutOfRangeException>());
             Assert.That(async () => await client.Characters.GetSubjects(0),
                         Throws.TypeOf<ArgumentOutOfRangeException>());

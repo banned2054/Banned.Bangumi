@@ -1,4 +1,4 @@
-using Banned.Bangumi.Models.Persons;
+using Banned.Bangumi.Models.Common;
 using System.Text.Json.Serialization;
 
 namespace Banned.Bangumi.Models;
@@ -24,7 +24,7 @@ public partial record LegacyMonoBase
     /// 肖像
     /// </summary>
     [JsonPropertyName("images")]
-    public PersonImages? Images { get; init; }
+    public Images? Images { get; init; }
     private IDictionary<string, object>? _additionalProperties;
 
     [JsonExtensionData]
