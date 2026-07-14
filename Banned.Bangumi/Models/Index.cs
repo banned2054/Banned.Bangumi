@@ -1,3 +1,4 @@
+using Banned.Bangumi.Models.Common;
 using System.Text.Json.Serialization;
 
 namespace Banned.Bangumi.Models;
@@ -23,7 +24,7 @@ public partial record Index
     /// 目录评论及收藏数
     /// </summary>
     [JsonPropertyName("stat")]
-    public Stat? Stat { get; init; }
+    public ResourceStatistics? Stat { get; init; }
 
     [JsonPropertyName("created_at")]
     public DateTimeOffset? CreatedAt { get; init; }

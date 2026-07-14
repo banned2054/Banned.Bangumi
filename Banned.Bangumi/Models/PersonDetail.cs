@@ -1,3 +1,4 @@
+using Banned.Bangumi.Models.Common;
 using Banned.Bangumi.Models.Enums;
 using Banned.Bangumi.Models.Persons;
 using System.Text.Json.Serialization;
@@ -78,5 +79,5 @@ public partial record PersonDetail
     public int? BirthDay { get; init; }
 
     [JsonPropertyName("stat")]
-    public Stat? Stat { get; init; }
+    public ResourceStatistics? Stat { get; init; }
 }
