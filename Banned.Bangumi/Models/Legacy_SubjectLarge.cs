@@ -9,8 +9,10 @@ public partial record LegacySubjectLarge : LegacySubjectMedium
     /// </summary>
     [JsonPropertyName("eps")]
     public new ICollection<LegacyEpisode>? Eps { get; init; }
+
     [JsonPropertyName("topic")]
     public ICollection<LegacyTopic>? Topic { get; init; }
+
     /// <summary>
     /// 评论日志
     /// </summary>

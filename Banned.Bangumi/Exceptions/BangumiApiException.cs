@@ -9,12 +9,11 @@ namespace Banned.Bangumi.Exceptions;
 /// </summary>
 public class BangumiApiException : Exception
 {
-    internal BangumiApiException(
-        string          message,
-        HttpStatusCode? statusCode     = null,
-        ErrorDetail?    error          = null,
-        string?         responseBody   = null,
-        Exception?      innerException = null)
+    internal BangumiApiException(string          message,
+                                 HttpStatusCode? statusCode     = null,
+                                 ErrorDetail?    error          = null,
+                                 string?         responseBody   = null,
+                                 Exception?      innerException = null)
         : base(message, innerException)
     {
         StatusCode   = statusCode;
