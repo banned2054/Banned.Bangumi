@@ -1,6 +1,7 @@
 using Banned.Bangumi.Exceptions;
 using Banned.Bangumi.Models.Common;
-using Banned.Bangumi.Models.Enums;
+using Banned.Bangumi.Models.Persons;
+using Banned.Bangumi.Models.Subjects;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;

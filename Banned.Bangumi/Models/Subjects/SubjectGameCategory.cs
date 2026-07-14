@@ -1,4 +1,4 @@
-namespace Banned.Bangumi.Models.Enums;
+namespace Banned.Bangumi.Models.Subjects;
 
 public enum SubjectGameCategory
 {

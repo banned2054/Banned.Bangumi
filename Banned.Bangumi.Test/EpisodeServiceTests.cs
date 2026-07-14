@@ -2,7 +2,6 @@ using System.Net;
 using System.Text;
 using Banned.Bangumi.Exceptions;
 using Banned.Bangumi.Models.Episodes;
-using Banned.Bangumi.Models.Enums;
 
 namespace Banned.Bangumi.Test;
 

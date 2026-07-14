@@ -1,5 +1,5 @@
 using Banned.Bangumi.Models.Calendar;
-using Banned.Bangumi.Models.Enums;
+using Banned.Bangumi.Models.Subjects;
 using System.Text.Json;
 
 namespace Banned.Bangumi.Test;

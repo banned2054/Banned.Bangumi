@@ -1,4 +1,4 @@
-namespace Banned.Bangumi.Models.Enums;
+namespace Banned.Bangumi.Models.Persons;
 
 /// <summary>
 /// 指定人物资源类型。<br/>

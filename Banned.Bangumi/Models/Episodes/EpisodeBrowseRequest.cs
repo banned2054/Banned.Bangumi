@@ -1,5 +1,3 @@
-using Banned.Bangumi.Models.Enums;
-
 namespace Banned.Bangumi.Models.Episodes;
 
 /// <summary>

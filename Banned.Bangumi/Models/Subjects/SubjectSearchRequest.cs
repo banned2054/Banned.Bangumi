@@ -1,4 +1,3 @@
-using Banned.Bangumi.Models.Enums;
 using System.Text.Json.Serialization;
 
 namespace Banned.Bangumi.Models.Subjects;

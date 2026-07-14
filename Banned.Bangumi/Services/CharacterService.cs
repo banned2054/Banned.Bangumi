@@ -1,7 +1,6 @@
 using Banned.Bangumi.Exceptions;
 using Banned.Bangumi.Models.Characters;
 using Banned.Bangumi.Models.Common;
-using Banned.Bangumi.Models.Enums;
 using Banned.Bangumi.Services.Internal;
 using System.Globalization;
 

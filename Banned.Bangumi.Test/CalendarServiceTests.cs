@@ -1,4 +1,4 @@
-using Banned.Bangumi.Models.Enums;
+using Banned.Bangumi.Models.Subjects;
 using System.Net;
 using System.Text;
 

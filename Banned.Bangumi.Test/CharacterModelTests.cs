@@ -1,5 +1,6 @@
 using Banned.Bangumi.Models.Characters;
-using Banned.Bangumi.Models.Enums;
+using Banned.Bangumi.Models.Common;
+using Banned.Bangumi.Models.Subjects;
 using System.Text.Json;
 
 namespace Banned.Bangumi.Test;

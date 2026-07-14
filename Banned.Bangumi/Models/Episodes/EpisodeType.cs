@@ -1,4 +1,4 @@
-namespace Banned.Bangumi.Models.Enums;
+namespace Banned.Bangumi.Models.Episodes;
 
 /// <summary>
 /// 指定章节类型。<br/>

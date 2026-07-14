@@ -1,4 +1,4 @@
-namespace Banned.Bangumi.Models.Enums;
+namespace Banned.Bangumi.Models.Subjects;
 
 /// <summary>
 /// 指定与条目类型对应的条目分类。<br/>

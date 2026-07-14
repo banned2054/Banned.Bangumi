@@ -1,10 +1,10 @@
-namespace Banned.Bangumi.Models.Enums;
+namespace Banned.Bangumi.Models.Subjects;
 
 /// <summary>
-/// 表示 Legacy API 使用的条目类型。<br/>
-/// Represents a subject type used by the Legacy API.
+/// 指定 Bangumi 条目类型。<br/>
+/// Specifies a Bangumi subject type.
 /// </summary>
-public enum LegacySubjectType
+public enum SubjectType
 {
     /// <summary>书籍。 / Book.</summary>
     Book = 1,
@@ -18,6 +18,6 @@ public enum LegacySubjectType
     /// <summary>游戏。 / Game.</summary>
     Game = 4,
 
-    /// <summary>三次元。 / Real-world subject.</summary>
-    Real = 6
+    /// <summary>三次元。 / Live action.</summary>
+    LiveAction = 6,
 }

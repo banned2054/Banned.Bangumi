@@ -1,4 +1,4 @@
-using Banned.Bangumi.Models.Enums;
+using Banned.Bangumi.Models.Collections;
 using Banned.Bangumi.Models.Episodes;
 using System.Text.Json.Serialization;
 

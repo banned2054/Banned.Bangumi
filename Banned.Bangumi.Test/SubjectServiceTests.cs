@@ -2,7 +2,8 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using Banned.Bangumi.Exceptions;
-using Banned.Bangumi.Models.Enums;
+using Banned.Bangumi.Models.Characters;
+using Banned.Bangumi.Models.Persons;
 using Banned.Bangumi.Models.Subjects;
 
 namespace Banned.Bangumi.Test;

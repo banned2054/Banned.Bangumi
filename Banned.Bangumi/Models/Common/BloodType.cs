@@ -1,4 +1,4 @@
-namespace Banned.Bangumi.Models.Enums;
+namespace Banned.Bangumi.Models.Common;
 
 /// <summary>
 /// 指定人物或角色的血型。<br/>

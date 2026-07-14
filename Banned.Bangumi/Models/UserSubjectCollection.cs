@@ -1,4 +1,5 @@
-using Banned.Bangumi.Models.Enums;
+using Banned.Bangumi.Models.Collections;
+using Banned.Bangumi.Models.Subjects;
 using System.Text.Json.Serialization;
 
 namespace Banned.Bangumi.Models;

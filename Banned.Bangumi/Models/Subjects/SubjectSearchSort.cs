@@ -1,4 +1,4 @@
-namespace Banned.Bangumi.Models.Enums;
+namespace Banned.Bangumi.Models.Subjects;
 
 /// <summary>
 /// 指定条目搜索结果的排序方式。<br/>
