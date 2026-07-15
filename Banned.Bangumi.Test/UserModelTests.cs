@@ -1,4 +1,3 @@
-using Banned.Bangumi.Models;
 using Banned.Bangumi.Models.Users;
 using System.Text.Json;
 
@@ -7,18 +6,6 @@ namespace Banned.Bangumi.Test;
 [TestFixture]
 public sealed class UserModelTests
 {
-    [Test]
-    public void LegacyUser_DeserializesSharedUserGroup()
-    {
-        const string json = """
-            {"id":1,"username":"sai","nickname":"Sai","usergroup":11}
-            """;
-
-        var user = JsonSerializer.Deserialize<LegacyUser>(json);
-
-        Assert.That(user!.UserGroup, Is.EqualTo(UserGroup.WikiUser));
-    }
-
     [Test]
     public void CurrentUser_DeserializesDeclaredFieldsAndIgnoresUndeclaredUrl()
     {

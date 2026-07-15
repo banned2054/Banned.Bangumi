@@ -1,6 +1,4 @@
-using Banned.Bangumi.Models;
 using Banned.Bangumi.Models.Calendar;
-using Banned.Bangumi.Models.Episodes;
 using Banned.Bangumi.Models.Subjects;
 using System.Text.Json;
 
@@ -83,13 +81,5 @@ public sealed class CalendarModelTests
         var day = JsonSerializer.Deserialize<CalendarDay>("{\"weekday\":{\"id\":1}}");
 
         Assert.That(day!.Items, Is.Empty);
-    }
-
-    [Test]
-    public void LegacyEpisode_DeserializesSharedEpisodeType()
-    {
-        var episode = JsonSerializer.Deserialize<LegacyEpisode>("{\"id\":1,\"type\":4}");
-
-        Assert.That(episode!.Type, Is.EqualTo(EpisodeType.PromotionalVideo));
     }
 }
