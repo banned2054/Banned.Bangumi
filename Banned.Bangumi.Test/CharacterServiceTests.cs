@@ -102,7 +102,7 @@ public sealed class CharacterServiceTests
         var result = await client.Characters.Search(new CharacterSearchRequest
         {
             Keyword = "主角",
-            Filter  = new CharacterSearchFilter { Nsfw = false },
+            Filter  = new CharacterSearchFilter { NsfwFilter = NsfwFilterMode.Exclude },
             Limit   = 10,
             Offset  = 20
         });
@@ -132,7 +132,7 @@ public sealed class CharacterServiceTests
     {
         var handler = new TestHttpMessageHandler((_, _) =>
                                                      Task.FromResult(new HttpResponseMessage(HttpStatusCode
-                                                                        .NoContent)));
+                                                                                 .NoContent)));
         using var httpClient = new HttpClient(handler);
         using var client     = CreateClient(httpClient, accessToken : "required-token");
 

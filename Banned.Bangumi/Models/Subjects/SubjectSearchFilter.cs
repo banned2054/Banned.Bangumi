@@ -1,3 +1,4 @@
+using Banned.Bangumi.Models.Common;
 using System.Text.Json.Serialization;
 
 namespace Banned.Bangumi.Models.Subjects;
@@ -43,8 +44,15 @@ public sealed record SubjectSearchFilter
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IReadOnlyList<string>? Ranks { get; init; }
 
-    /// <summary>获取或初始化 NSFW 筛选值。<br/>Gets or initializes the NSFW filter.</summary>
+    /// <summary>
+    /// 获取或初始化 NSFW 搜索限制；<see langword="null"/> 不限制结果。<br/>
+    /// Gets or initializes the NSFW search restriction; <see langword="null"/> does not restrict results.
+    /// </summary>
+    /// <remarks>
+    /// 无权限的用户设置此属性时，服务端会忽略该筛选条件且不会返回 NSFW 条目。<br/>
+    /// The server ignores this filter for unauthorized users and does not return NSFW subjects.
+    /// </remarks>
     [JsonPropertyName("nsfw")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public bool? Nsfw { get; init; }
+    public NsfwFilterMode? NsfwFilter { get; init; }
 }

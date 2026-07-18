@@ -1,11 +1,11 @@
+using Banned.Bangumi.Exceptions;
+using Banned.Bangumi.Models.Characters;
+using Banned.Bangumi.Models.Common;
+using Banned.Bangumi.Models.Persons;
+using Banned.Bangumi.Models.Subjects;
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using Banned.Bangumi.Exceptions;
-using Banned.Bangumi.Models.Characters;
-using Banned.Bangumi.Models.Persons;
-using Banned.Bangumi.Models.Common;
-using Banned.Bangumi.Models.Subjects;
 
 namespace Banned.Bangumi.Test;
 
@@ -207,7 +207,7 @@ public sealed class SubjectServiceTests
                 Types = [SubjectType.Anime, SubjectType.LiveAction],
                 MetaTags = ["原创", "-科幻"],
                 Ratings = [">=6", "<9"],
-                Nsfw = false
+                NsfwFilter = NsfwFilterMode.Exclude
             }
         });
 

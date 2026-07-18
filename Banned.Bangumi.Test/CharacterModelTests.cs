@@ -60,14 +60,22 @@ public sealed class CharacterModelTests
         var request = new CharacterSearchRequest
         {
             Keyword = "keyword",
-            Filter  = new CharacterSearchFilter { Nsfw = false },
+            Filter  = new CharacterSearchFilter { NsfwFilter = NsfwFilterMode.Only },
             Limit   = 20,
             Offset  = 40,
         };
 
         var json = JsonSerializer.Serialize(request);
 
-        Assert.That(json, Is.EqualTo("{\"keyword\":\"keyword\",\"filter\":{\"nsfw\":false}}"));
+        Assert.That(json, Is.EqualTo("{\"keyword\":\"keyword\",\"filter\":{\"nsfw\":true}}"));
+    }
+
+    [Test]
+    public void CharacterSearchFilter_DeserializesNsfwBooleanAsFilterMode()
+    {
+        var filter = JsonSerializer.Deserialize<CharacterSearchFilter>("{\"nsfw\":false}");
+
+        Assert.That(filter!.NsfwFilter, Is.EqualTo(NsfwFilterMode.Exclude));
     }
 
     [Test]
