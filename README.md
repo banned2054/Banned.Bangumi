@@ -219,6 +219,10 @@ dotnet test Banned.Bangumi.slnx
 
 Tests use a controlled `HttpMessageHandler` and do not depend on the live Bangumi API. Both the SDK and test project target .NET 8, .NET 9, and .NET 10.
 
+## 📜 Changelog
+
+[🧾 View CHANGELOG](https://github.com/banned2054/Banned.Bangumi/blob/main/Docs/CHANGELOG.md)
+
 ## ⚖️ License
 
 Copyright (c) 2026 banned.
