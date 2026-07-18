@@ -227,7 +227,7 @@ Tests use a controlled `HttpMessageHandler` and do not depend on the live Bangum
 
 Copyright (c) 2026 banned.
 
-This project is licensed under the Apache License 2.0. See the [LICENSE](./LICENSE.txt) file for details.
+This project is licensed under the Apache License 2.0. See the [LICENSE](./LICENSE.txt) file for details. Upstream attributions and project independence notices are provided in [NOTICE](./NOTICE).
 
 ## 🤝 Contributing
 

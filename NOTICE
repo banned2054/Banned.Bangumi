@@ -1,0 +1,20 @@
+Banned.Bangumi
+Copyright (c) 2026 banned
+
+This project is licensed under the Apache License, Version 2.0.
+
+Banned.Bangumi is an independent .NET SDK for the Bangumi API. It is not
+affiliated with, endorsed by, or sponsored by Bangumi or bgm.tv.
+
+This project was implemented with reference to the publicly available
+Bangumi API documentation and OpenAPI descriptions maintained by the Bangumi
+contributors:
+
+- Bangumi API
+  https://github.com/bangumi/api
+
+- Bangumi API server
+  https://github.com/bangumi/server
+
+Bangumi, bgm.tv, and related names and marks are the property of their
+respective owners.

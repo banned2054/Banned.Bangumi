@@ -227,7 +227,7 @@ dotnet test Banned.Bangumi.slnx
 
 Copyright (c) 2026 banned.
 
-本项目基于 Apache License 2.0 协议开源。详情请参阅 [LICENSE](../LICENSE.txt) 文件。
+本项目基于 Apache License 2.0 协议开源。详情请参阅 [LICENSE](../LICENSE.txt) 文件。上游归属与项目独立性声明请参阅 [NOTICE](../NOTICE)。
 
 ## 🤝 参与贡献
 

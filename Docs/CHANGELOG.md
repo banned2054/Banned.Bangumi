@@ -39,6 +39,7 @@ This initial stable release provides a modern, strongly typed .NET SDK for the B
 * **Documentation and Packaging**
   - Added Simplified Chinese and English XML documentation for all public APIs.
   - Added English and Simplified Chinese usage guides with authentication, pagination, and error-handling examples.
+  - Added upstream attribution and project independence notices.
   - Added NuGet metadata and GitHub Actions publishing for package version `1.0.0`.
 
 * **Tests and Framework Support**
