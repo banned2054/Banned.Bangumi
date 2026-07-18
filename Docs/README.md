@@ -233,7 +233,10 @@ dotnet build Banned.Bangumi.slnx
 dotnet test Banned.Bangumi.slnx
 ```
 
-测试使用可控的 `HttpMessageHandler`，不依赖真实 Bangumi API。SDK 和测试项目均覆盖 .NET 8、.NET 9 与 .NET 10。
+单元测试使用可控的 `HttpMessageHandler`，不依赖真实 Bangumi API。可选运行的集成测试使用默认 API 地址，
+并读取环境变量 `BANGUMI_USER_AGENT`、可选的 `BANGUMI_PROXY` 和可选的 `BANGUMI_ACCESS_TOKEN`。
+在 Visual Studio 中选择已被 Git 忽略的 `local.runsettings`，然后运行 `Integration` 分类即可。为避免同一请求
+发送三次，真实测试只在 .NET 10 目标上执行。SDK 和测试项目均覆盖 .NET 8、.NET 9 与 .NET 10。
 
 ## 📜 更新日志
 

@@ -234,7 +234,11 @@ dotnet build Banned.Bangumi.slnx
 dotnet test Banned.Bangumi.slnx
 ```
 
-Tests use a controlled `HttpMessageHandler` and do not depend on the live Bangumi API. Both the SDK and test project target .NET 8, .NET 9, and .NET 10.
+Unit tests use a controlled `HttpMessageHandler` and do not depend on the live Bangumi API. Opt-in integration tests
+use the default API address and read `BANGUMI_USER_AGENT`, optional `BANGUMI_PROXY`, and optional
+`BANGUMI_ACCESS_TOKEN` environment variables. Select the ignored `local.runsettings` file in Visual Studio, then run
+the `Integration` category. Live tests execute only on the .NET 10 target to avoid sending each request three times.
+Both the SDK and test project target .NET 8, .NET 9, and .NET 10.
 
 ## 📜 Changelog
 

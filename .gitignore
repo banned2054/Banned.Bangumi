@@ -363,3 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 plan.md
 AGENTS.md
+
+# Local live API test settings (may contain an access token)
+local.runsettings
