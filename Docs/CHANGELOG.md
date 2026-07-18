@@ -25,7 +25,8 @@ This initial stable release provides a modern, strongly typed .NET SDK for the B
 
 * **Unified Client and HTTP Infrastructure**
   - Added `BangumiClient` as the single public entry point for all resource services.
-  - Added `BangumiClientOptions` for configuring the API address, User-Agent, access token, timeout, and caller-provided `HttpClient`.
+  - Added `BangumiClientOptions` for configuring the API address, User-Agent, access token, timeout, proxy, and caller-provided `HttpClient`.
+  - Added built-in `IWebProxy` support for SDK-managed HTTP clients without requiring a custom `HttpClient`.
   - Added no-authentication, optional-authentication, and required-authentication request modes.
   - Added consistent API, authentication, and rate-limit exceptions.
   - Added cancellation support to every public network operation.
@@ -45,6 +46,7 @@ This initial stable release provides a modern, strongly typed .NET SDK for the B
 * **Tests and Framework Support**
   - Added controlled `HttpMessageHandler` tests that do not depend on the live Bangumi API.
   - Added coverage for request paths, methods, queries, JSON bodies, headers, authentication, cancellation, errors, deserialization, and `HttpClient` ownership.
+  - Added opt-in live API integration tests with environment-based User-Agent, proxy, and access-token configuration.
   - Added support for .NET 8, .NET 9, and .NET 10.
 
 ---

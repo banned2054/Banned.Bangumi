@@ -18,6 +18,7 @@
 			- Added all 56 operations from the bundled Bangumi OpenAPI specification.
 			- Added resource-oriented services for calendars, subjects, episodes, characters, persons, users, collections, revisions, and indices.
 			- Added Bearer authentication, consistent API exceptions, cancellation, and caller-owned HttpClient support.
+			- Added built-in IWebProxy support for SDK-managed HTTP clients.
 			- Added strongly typed public models and consistent paginated results.
 			- Added support for .NET 8, .NET 9, and .NET 10.
 		</PackageReleaseNotes>
