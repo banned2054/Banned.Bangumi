@@ -14,6 +14,7 @@
 - **鉴权语义明确**：区分无需 Token、可选 Token 和必须使用 Bearer Access Token 的接口。
 - **一致的公开模型**：使用具有业务含义的请求类型和统一的 `PagedResult<T>`，不暴露生成器导向的 Schema 名称。
 - **安全的 HTTP 所有权**：SDK 不会修改或释放调用方传入的 `HttpClient`。
+- **内置代理支持**：无需自定义 `HttpClient` 即可配置 HTTP(S) 代理。
 - **多目标框架支持**：支持 `net8.0`、`net9.0` 和 `net10.0`。
 - **双语 API 文档**：所有公开 API 均提供简体中文和英文 XML 文档。
 
@@ -164,7 +165,20 @@ catch (BangumiApiException exception)
 }
 ```
 
-需要接入 `IHttpClientFactory`、代理或自定义 Handler 时，可以传入现有的 `HttpClient`：
+使用 SDK 内部管理的 HTTP 客户端时，可以直接配置 HTTP(S) 代理：
+
+```csharp
+using System.Net;
+
+using var proxiedClient = new BangumiClient(new BangumiClientOptions
+{
+    UserAgent = "MyBangumiApp/1.0 (dev@example.com)",
+    Proxy = new WebProxy(new Uri("http://127.0.0.1:7890"))
+});
+```
+
+`WebProxy` 还支持凭据和绕过规则。需要接入 `IHttpClientFactory` 或其他自定义 Handler 时，仍可传入现有的
+`HttpClient`：
 
 ```csharp
 using var httpClient = new HttpClient(customHandler);
@@ -176,7 +190,9 @@ using var customClient = new BangumiClient(new BangumiClientOptions
 });
 ```
 
-`BangumiClient.Dispose()` 只会释放由 SDK 自己创建的 HTTP 客户端，调用方传入的客户端始终由调用方管理。`BaseAddress` 也可以改为兼容代理或测试服务器，但必须是绝对 HTTP(S) 地址。
+`Proxy` 与 `HttpClient` 不能同时配置，因为 SDK 无法安全地重新配置调用方客户端的消息处理程序。
+`BangumiClient.Dispose()` 只会释放由 SDK 自己创建的 HTTP 客户端，调用方传入的客户端始终由调用方管理。
+`BaseAddress` 也可以改为兼容的 API 网关或测试服务器，但必须是绝对 HTTP(S) 地址。
 
 ## 🛠 项目架构
 

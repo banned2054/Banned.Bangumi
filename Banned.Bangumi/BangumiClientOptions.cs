@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace Banned.Bangumi;
 
 /// <summary>
@@ -33,6 +35,17 @@ public sealed class BangumiClientOptions
     /// A supplied client is never disposed or reconfigured by the SDK.
     /// </remarks>
     public HttpClient? HttpClient { get; init; }
+
+    /// <summary>
+    /// 获取 SDK 内部创建 HTTP 客户端时使用的可选代理。<br/>
+    /// Gets the optional proxy used when the SDK creates its HTTP client.
+    /// </summary>
+    /// <remarks>
+    /// 此选项不能与 <see cref="HttpClient"/> 同时使用；调用方提供客户端时，应在其消息处理程序上配置代理。<br/>
+    /// This option cannot be combined with <see cref="HttpClient"/>; configure the proxy on the message handler
+    /// when supplying a client.
+    /// </remarks>
+    public IWebProxy? Proxy { get; init; }
 
     /// <summary>
     /// 获取 SDK 应用于每个请求的超时时间。<br/>

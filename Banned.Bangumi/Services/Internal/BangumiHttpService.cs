@@ -34,7 +34,7 @@ internal sealed class BangumiHttpService : IDisposable
         _accessToken       = string.IsNullOrWhiteSpace(options.AccessToken) ? null : options.AccessToken;
         _timeout           = options.Timeout;
         _disposeHttpClient = options.HttpClient is null;
-        _httpClient = options.HttpClient ?? new HttpClient(new HttpClientHandler { AllowAutoRedirect = false })
+        _httpClient = options.HttpClient ?? new HttpClient(CreateHttpClientHandler(options.Proxy))
             { Timeout = Timeout.InfiniteTimeSpan };
         _serializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
         _serializerOptions.Converters.Add(new JsonStringEnumConverter<PersonCareer>(JsonNamingPolicy.CamelCase));
@@ -42,6 +42,12 @@ internal sealed class BangumiHttpService : IDisposable
     }
 
     internal bool OwnsHttpClient => _disposeHttpClient;
+
+    internal static HttpClientHandler CreateHttpClientHandler(IWebProxy? proxy) => new()
+    {
+        AllowAutoRedirect = false,
+        Proxy             = proxy
+    };
 
     internal static string AddQueryString(string path, IEnumerable<KeyValuePair<string, string?>> parameters)
     {
@@ -300,6 +306,12 @@ internal sealed class BangumiHttpService : IDisposable
         {
             throw new ArgumentOutOfRangeException(nameof(options),
                                                   "Timeout must be positive or Timeout.InfiniteTimeSpan.");
+        }
+
+        if (options.HttpClient is not null && options.Proxy is not null)
+        {
+            throw new ArgumentException("Proxy cannot be used together with a caller-provided HttpClient.",
+                                        nameof(options));
         }
     }
 

@@ -14,6 +14,7 @@ English | [简体中文](./Docs/README.md)
 - **Authentication-Aware**: Distinguishes endpoints that require no token, accept an optional token, or require a Bearer access token.
 - **Consistent Public Models**: Uses meaningful request types and a shared `PagedResult<T>` instead of generator-oriented schema names.
 - **Safe HTTP Ownership**: A caller-provided `HttpClient` is never modified or disposed by the SDK.
+- **Built-in Proxy Support**: Configures HTTP(S) proxies without requiring a custom `HttpClient`.
 - **Multi-Target Support**: Builds for `net8.0`, `net9.0`, and `net10.0`.
 - **Bilingual API Documentation**: All public APIs include Simplified Chinese and English XML documentation.
 
@@ -164,7 +165,20 @@ catch (BangumiApiException exception)
 }
 ```
 
-A custom `HttpClient` can be supplied for `IHttpClientFactory`, proxy, or custom handler integration:
+An HTTP(S) proxy can be configured directly while the SDK continues to manage the HTTP client:
+
+```csharp
+using System.Net;
+
+using var proxiedClient = new BangumiClient(new BangumiClientOptions
+{
+    UserAgent = "MyBangumiApp/1.0 (dev@example.com)",
+    Proxy = new WebProxy(new Uri("http://127.0.0.1:7890"))
+});
+```
+
+`WebProxy` also supports credentials and bypass rules. For `IHttpClientFactory` or other custom handler integration,
+a caller-owned `HttpClient` can still be supplied:
 
 ```csharp
 using var httpClient = new HttpClient(customHandler);
@@ -176,7 +190,10 @@ using var customClient = new BangumiClient(new BangumiClientOptions
 });
 ```
 
-`BangumiClient.Dispose()` only disposes HTTP clients created internally by the SDK. A supplied client remains entirely caller-owned. `BaseAddress` can also be changed for a compatible proxy or test server and must be an absolute HTTP(S) URI.
+`Proxy` and `HttpClient` are mutually exclusive because the SDK cannot safely reconfigure a supplied client's
+message handler. `BangumiClient.Dispose()` only disposes HTTP clients created internally by the SDK. A supplied
+client remains entirely caller-owned. `BaseAddress` can also be changed for a compatible API gateway or test server
+and must be an absolute HTTP(S) URI.
 
 ## 🛠 Project Architecture
 

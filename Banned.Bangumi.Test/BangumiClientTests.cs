@@ -1,4 +1,5 @@
 using Banned.Bangumi.Services.Internal;
+using System.Net;
 
 namespace Banned.Bangumi.Test;
 
@@ -59,6 +60,35 @@ public sealed class BangumiClientTests
         {
             Assert.That(() => new BangumiClient(invalidAddress), Throws.TypeOf<ArgumentException>());
             Assert.That(() => new BangumiClient(invalidTimeout), Throws.TypeOf<ArgumentOutOfRangeException>());
+        });
+    }
+
+    [Test]
+    public void Constructor_RejectsProxyWithCallerOwnedHttpClient()
+    {
+        using var httpClient = new HttpClient();
+        var options = new BangumiClientOptions
+        {
+            UserAgent  = "Banned.Bangumi.Test/1.0",
+            HttpClient = httpClient,
+            Proxy      = new WebProxy(new Uri("http://127.0.0.1:7890"))
+        };
+
+        Assert.That(() => new BangumiClient(options), Throws.TypeOf<ArgumentException>());
+    }
+
+    [Test]
+    public void HttpService_ConfiguresProxyOnInternallyCreatedHandler()
+    {
+        var proxy = new WebProxy(new Uri("http://127.0.0.1:7890"));
+
+        using var handler = BangumiHttpService.CreateHttpClientHandler(proxy);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(handler.Proxy, Is.SameAs(proxy));
+            Assert.That(handler.UseProxy, Is.True);
+            Assert.That(handler.AllowAutoRedirect, Is.False);
         });
     }
 
