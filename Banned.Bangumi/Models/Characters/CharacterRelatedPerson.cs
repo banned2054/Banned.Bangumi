@@ -1,5 +1,4 @@
 using Banned.Bangumi.Models.Common;
-using Banned.Bangumi.Models.Persons;
 using Banned.Bangumi.Models.Subjects;
 using System.Text.Json.Serialization;
 
