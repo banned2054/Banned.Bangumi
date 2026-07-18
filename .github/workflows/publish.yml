@@ -7,6 +7,9 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest # Can be changed to windows-latest if needed
+        permissions:
+            contents: read
+            id-token: write
 
         steps:
             - name: Checkout repository
@@ -37,6 +40,12 @@ jobs:
                   VERSION=$(xmllint --xpath "string(//Project/PropertyGroup/Version)" Banned.Bangumi/Banned.Bangumi.csproj)
                   echo "version=$VERSION" >> $GITHUB_ENV
 
+            - name: Log in to NuGet with Trusted Publishing
+              uses: NuGet/login@v1
+              id: login
+              with:
+                  user: ${{ vars.NUGET_USER }}
+
             - name: Push NuGet package
               run: |
                   NUPKG_FILE=$(find nupkg -name "Banned.Bangumi.$version.nupkg" -print -quit)
@@ -45,4 +54,4 @@ jobs:
                     exit 1
                   fi
                   echo "Pushing $NUPKG_FILE to NuGet..."
-                  dotnet nuget push "$NUPKG_FILE" --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+                  dotnet nuget push "$NUPKG_FILE" --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
