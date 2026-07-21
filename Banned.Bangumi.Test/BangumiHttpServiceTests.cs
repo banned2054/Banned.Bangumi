@@ -1,4 +1,5 @@
 using Banned.Bangumi.Exceptions;
+using Banned.Bangumi.Models.Common;
 using Banned.Bangumi.Services.Internal;
 using System.Net;
 using System.Net.Http.Headers;
@@ -26,26 +27,27 @@ public sealed class BangumiHttpServiceTests
     [Test]
     public async Task Send_AddsPerRequestHeadersAndSerializesBodyWithoutMutatingHttpClient()
     {
-        var       handler    = CreateJsonHandler("{\"value\":\"response\"}");
+        var       handler    = CreateJsonHandler("{\"description\":\"response\"}");
         using var httpClient = new HttpClient(handler);
         httpClient.BaseAddress = new Uri("https://caller.example/");
         httpClient.Timeout     = TimeSpan.FromSeconds(11);
         httpClient.DefaultRequestHeaders.Add("X-Caller", "preserved");
         var service = CreateService(handler, httpClient, accessToken : "secret-token");
 
-        var result = await service.Send<TestPayload>(HttpMethod.Post, "/v0/test?offset=2", AuthenticationMode.Optional,
-                                                     new TestPayload("request"));
+        var result = await service.Send<ErrorDetail, ErrorDetail>(HttpMethod.Post, "/v0/test?offset=2",
+                                                                 AuthenticationMode.Optional,
+                                                                 new ErrorDetail { Description = "request" });
 
         Assert.That(handler.Requests.TryDequeue(out var request), Is.True);
         Assert.Multiple(() =>
         {
-            Assert.That(result.Value, Is.EqualTo("response"));
+            Assert.That(result.Description, Is.EqualTo("response"));
             Assert.That(request!.Method, Is.EqualTo(HttpMethod.Post));
             Assert.That(request.Uri, Is.EqualTo(new Uri("https://api.example/root/v0/test?offset=2")));
             Assert.That(request.UserAgent, Is.EqualTo("Banned.Bangumi.Test/1.0"));
             Assert.That(request.Authorization, Is.EqualTo("Bearer secret-token"));
             Assert.That(request.ContentType, Does.StartWith("application/json"));
-            Assert.That(request.Body, Is.EqualTo("{\"value\":\"request\"}"));
+            Assert.That(request.Body, Is.EqualTo("{\"title\":null,\"description\":\"request\",\"details\":null}"));
             Assert.That(httpClient.BaseAddress, Is.EqualTo(new Uri("https://caller.example/")));
             Assert.That(httpClient.Timeout, Is.EqualTo(TimeSpan.FromSeconds(11)));
             Assert.That(httpClient.DefaultRequestHeaders.Contains("X-Caller"), Is.True);
@@ -165,7 +167,7 @@ public sealed class BangumiHttpServiceTests
         using var service    = CreateService(handler, httpClient);
 
         var exception =
-            Assert.ThrowsAsync<BangumiApiException>(async () => await service.Get<TestPayload>("/invalid-json"));
+            Assert.ThrowsAsync<BangumiApiException>(async () => await service.Get<ErrorDetail>("/invalid-json"));
 
         Assert.Multiple(() =>
         {
@@ -243,6 +245,4 @@ public sealed class BangumiHttpServiceTests
             Timeout     = TimeSpan.FromSeconds(5)
         });
     }
-
-    private sealed record TestPayload(string? Value = null);
 }

@@ -68,8 +68,9 @@ public sealed class IndexService
         ArgumentNullException.ThrowIfNull(request);
 
         return await HttpService
-                    .Send<BangumiIndex>(HttpMethod.Put, $"/v0/indices/{indexId}", AuthenticationMode.Required, request,
-                                        cancellationToken).ConfigureAwait(false);
+                    .Send<IndexUpdateRequest, BangumiIndex>(HttpMethod.Put, $"/v0/indices/{indexId}",
+                                                           AuthenticationMode.Required, request, cancellationToken)
+                    .ConfigureAwait(false);
     }
 
     /// <summary>

@@ -125,8 +125,8 @@ public sealed class PersonService
                                                      });
 
         return await HttpService
-                    .Send<PagedResult<Person>>(HttpMethod.Post, path, AuthenticationMode.None, request,
-                                               cancellationToken).ConfigureAwait(false);
+                    .Send<PersonSearchRequest, PagedResult<Person>>(HttpMethod.Post, path, AuthenticationMode.None,
+                                                                   request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>

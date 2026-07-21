@@ -26,6 +26,12 @@ jobs:
             - name: Build the project
               run: dotnet build Banned.Bangumi/Banned.Bangumi.csproj --configuration Release --no-restore
 
+            - name: Publish Native AOT smoke test
+              run: dotnet publish Banned.Bangumi.AotSmoke/Banned.Bangumi.AotSmoke.csproj --configuration Release --runtime linux-x64 -p:PublishAot=true --output aot-smoke
+
+            - name: Run Native AOT smoke test
+              run: ./aot-smoke/Banned.Bangumi.AotSmoke
+
             - name: Pack the project
               run: dotnet pack Banned.Bangumi/Banned.Bangumi.csproj --configuration Release --no-build --output nupkg
 

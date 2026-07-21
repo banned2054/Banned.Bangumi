@@ -126,8 +126,9 @@ public sealed class CharacterService
                                                      });
 
         return await HttpService
-                    .Send<PagedResult<Character>>(HttpMethod.Post, path, AuthenticationMode.None, request,
-                                                  cancellationToken).ConfigureAwait(false);
+                    .Send<CharacterSearchRequest, PagedResult<Character>>(HttpMethod.Post, path,
+                                                                         AuthenticationMode.None, request,
+                                                                         cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>

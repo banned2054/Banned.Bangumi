@@ -2,11 +2,13 @@ using Banned.Bangumi.Exceptions;
 using Banned.Bangumi.Models.Common;
 using Banned.Bangumi.Models.Persons;
 using Banned.Bangumi.Models.Subjects;
+using Banned.Bangumi.Serialization;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Banned.Bangumi.Services.Internal;
 
@@ -16,7 +18,7 @@ internal sealed class BangumiHttpService : IDisposable
 
     private readonly Uri                   _baseAddress;
     private readonly HttpClient            _httpClient;
-    private readonly JsonSerializerOptions _serializerOptions;
+    private readonly BangumiJsonSerializerContext _serializerContext;
     private readonly TimeSpan              _timeout;
 
     private readonly string? _accessToken;
@@ -36,9 +38,10 @@ internal sealed class BangumiHttpService : IDisposable
         _disposeHttpClient = options.HttpClient is null;
         _httpClient = options.HttpClient ?? new HttpClient(CreateHttpClientHandler(options.Proxy))
             { Timeout = Timeout.InfiniteTimeSpan };
-        _serializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
-        _serializerOptions.Converters.Add(new JsonStringEnumConverter<PersonCareer>(JsonNamingPolicy.CamelCase));
-        _serializerOptions.Converters.Add(new JsonStringEnumConverter<SubjectSearchSort>(JsonNamingPolicy.CamelCase));
+        var serializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+        serializerOptions.Converters.Add(new JsonStringEnumConverter<PersonCareer>(JsonNamingPolicy.CamelCase));
+        serializerOptions.Converters.Add(new JsonStringEnumConverter<SubjectSearchSort>(JsonNamingPolicy.CamelCase));
+        _serializerContext = new BangumiJsonSerializerContext(serializerOptions);
     }
 
     internal bool OwnsHttpClient => _disposeHttpClient;
@@ -82,7 +85,7 @@ internal sealed class BangumiHttpService : IDisposable
     internal Task<TResponse> Get<TResponse>(string             path,
                                             AuthenticationMode authenticationMode = AuthenticationMode.None,
                                             CancellationToken  cancellationToken  = default) =>
-        Send<TResponse>(HttpMethod.Get, path, authenticationMode, null, cancellationToken);
+        Send<TResponse>(HttpMethod.Get, path, authenticationMode, cancellationToken);
 
     internal async Task<Uri> GetRedirectUri(string             path,
                                             AuthenticationMode authenticationMode = AuthenticationMode.None,
@@ -114,12 +117,11 @@ internal sealed class BangumiHttpService : IDisposable
     internal async Task<TResponse> Send<TResponse>(HttpMethod         method,
                                                    string             path,
                                                    AuthenticationMode authenticationMode,
-                                                   object?            body              = null,
                                                    CancellationToken  cancellationToken = default)
     {
         using var timeoutSource              = CreateTimeoutSource(cancellationToken);
         var       effectiveCancellationToken = timeoutSource?.Token ?? cancellationToken;
-        using var response = await SendCore(method, path, authenticationMode, body, effectiveCancellationToken)
+        using var response = await SendCore(method, path, authenticationMode, null, effectiveCancellationToken)
            .ConfigureAwait(false);
         var responseBody = await response.Content.ReadAsStringAsync(effectiveCancellationToken)
                                          .ConfigureAwait(false);
@@ -131,7 +133,7 @@ internal sealed class BangumiHttpService : IDisposable
 
         try
         {
-            var result = JsonSerializer.Deserialize<TResponse>(responseBody, _serializerOptions);
+            var result = JsonSerializer.Deserialize(responseBody, GetTypeInfo<TResponse>());
             return result ?? throw new JsonException("The JSON response was null.");
         }
         catch (JsonException exception)
@@ -142,19 +144,76 @@ internal sealed class BangumiHttpService : IDisposable
         }
     }
 
-    internal async Task Send(HttpMethod method, string path, AuthenticationMode authenticationMode, object? body = null,
+    internal async Task<TResponse> Send<TRequest, TResponse>(HttpMethod         method,
+                                                             string             path,
+                                                             AuthenticationMode authenticationMode,
+                                                             TRequest           body,
+                                                             CancellationToken  cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(body);
+        var requestBody = JsonSerializer.Serialize(body, GetTypeInfo<TRequest>());
+        return await SendResponse<TResponse>(method, path, authenticationMode, requestBody, cancellationToken)
+                    .ConfigureAwait(false);
+    }
+
+    internal async Task Send(HttpMethod method, string path, AuthenticationMode authenticationMode,
                              CancellationToken cancellationToken = default)
     {
         using var timeoutSource              = CreateTimeoutSource(cancellationToken);
         var       effectiveCancellationToken = timeoutSource?.Token ?? cancellationToken;
-        using var response = await SendCore(method, path, authenticationMode, body, effectiveCancellationToken)
+        using var response = await SendCore(method, path, authenticationMode, null, effectiveCancellationToken)
            .ConfigureAwait(false);
+    }
+
+    internal async Task Send<TRequest>(HttpMethod         method,
+                                       string             path,
+                                       AuthenticationMode authenticationMode,
+                                       TRequest           body,
+                                       CancellationToken  cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(body);
+        var requestBody = JsonSerializer.Serialize(body, GetTypeInfo<TRequest>());
+        using var timeoutSource              = CreateTimeoutSource(cancellationToken);
+        var       effectiveCancellationToken = timeoutSource?.Token ?? cancellationToken;
+        using var response = await SendCore(method, path, authenticationMode, requestBody, effectiveCancellationToken)
+                                  .ConfigureAwait(false);
+    }
+
+    private async Task<TResponse> SendResponse<TResponse>(HttpMethod         method,
+                                                          string             path,
+                                                          AuthenticationMode authenticationMode,
+                                                          string             requestBody,
+                                                          CancellationToken  cancellationToken)
+    {
+        using var timeoutSource              = CreateTimeoutSource(cancellationToken);
+        var       effectiveCancellationToken = timeoutSource?.Token ?? cancellationToken;
+        using var response = await SendCore(method, path, authenticationMode, requestBody, effectiveCancellationToken)
+                                  .ConfigureAwait(false);
+        var responseBody = await response.Content.ReadAsStringAsync(effectiveCancellationToken)
+                                         .ConfigureAwait(false);
+
+        if (string.IsNullOrWhiteSpace(responseBody))
+        {
+            throw new BangumiApiException("Bangumi returned an empty response body.", response.StatusCode);
+        }
+
+        try
+        {
+            var result = JsonSerializer.Deserialize(responseBody, GetTypeInfo<TResponse>());
+            return result ?? throw new JsonException("The JSON response was null.");
+        }
+        catch (JsonException exception)
+        {
+            throw new BangumiApiException("Bangumi returned a response that could not be deserialized.",
+                                          response.StatusCode, responseBody : BoundDiagnosticBody(responseBody),
+                                          innerException : exception);
+        }
     }
 
     private async Task<HttpResponseMessage> SendCore(HttpMethod         method,
                                                      string             path,
                                                      AuthenticationMode authenticationMode,
-                                                     object?            body,
+                                                      string?            requestBody,
                                                      CancellationToken  cancellationToken,
                                                      bool               allowRedirectResponse = false)
     {
@@ -175,10 +234,9 @@ internal sealed class BangumiHttpService : IDisposable
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
         }
 
-        if (body is not null)
+        if (requestBody is not null)
         {
-            var json = JsonSerializer.Serialize(body, _serializerOptions);
-            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
         }
 
         var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken)
@@ -210,7 +268,7 @@ internal sealed class BangumiHttpService : IDisposable
         {
             try
             {
-                error = JsonSerializer.Deserialize<ErrorDetail>(responseBody, _serializerOptions);
+                error = JsonSerializer.Deserialize(responseBody, GetTypeInfo<ErrorDetail>());
             }
             catch (JsonException)
             {
@@ -281,6 +339,10 @@ internal sealed class BangumiHttpService : IDisposable
         string.IsNullOrEmpty(responseBody)
             ? null
             : responseBody[..Math.Min(responseBody.Length, MaximumDiagnosticBodyLength)];
+
+    private JsonTypeInfo<T> GetTypeInfo<T>() =>
+        (_serializerContext.GetTypeInfo(typeof(T)) as JsonTypeInfo<T>) ??
+        throw new InvalidOperationException($"JSON metadata is not registered for {typeof(T)}.");
 
     private static void ValidateOptions(BangumiClientOptions options)
     {

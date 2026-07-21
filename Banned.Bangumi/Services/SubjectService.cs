@@ -181,8 +181,8 @@ public sealed class SubjectService
                                                      });
 
         return await HttpService
-                    .Send<PagedResult<Subject>>(HttpMethod.Post, path, AuthenticationMode.None, request,
-                                                cancellationToken).ConfigureAwait(false);
+                    .Send<SubjectSearchRequest, PagedResult<Subject>>(HttpMethod.Post, path, AuthenticationMode.None,
+                                                                     request, cancellationToken).ConfigureAwait(false);
     }
 
     private static string? FormatBoolean(bool? value) => value?.ToString().ToLowerInvariant();
