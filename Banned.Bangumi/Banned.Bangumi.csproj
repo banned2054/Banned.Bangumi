@@ -3,26 +3,24 @@
 	<PropertyGroup>
 		<TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>
 		<PackageId>Banned.Bangumi</PackageId>
-		<Version>1.0.0</Version>
+		<Version>1.1.0</Version>
 		<RepositoryUrl>https://github.com/banned2054/Banned.Bangumi</RepositoryUrl>
 		<Authors>banned</Authors>
 		<Copyright>Copyright (c) 2026 banned</Copyright>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<Nullable>enable</Nullable>
-		<Description>A modern, strongly typed .NET SDK for the Bangumi OpenAPI</Description>
+		<Description>A user-friendly, hand-curated .NET SDK for the Bangumi API with resource-oriented services, strong typing, async APIs, and Native AOT support</Description>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageReleaseNotes>
-			Version 1.0.0 is the initial release of Banned.Bangumi.
+			Version 1.1.0 adds Native AOT and trimming compatibility to Banned.Bangumi.
 
-			- Added all 56 operations from the bundled Bangumi OpenAPI specification.
-			- Added resource-oriented services for calendars, subjects, episodes, characters, persons, users, collections, revisions, and indices.
-			- Added Bearer authentication, consistent API exceptions, cancellation, and caller-owned HttpClient support.
-			- Added built-in IWebProxy support for SDK-managed HTTP clients.
-			- Added strongly typed public models and consistent paginated results.
-			- Added support for .NET 8, .NET 9, and .NET 10.
+			- Added source-generated System.Text.Json metadata for every API request and response type.
+			- Added Native AOT and trimming compatibility without changing the public API.
+			- Added a self-contained Native AOT smoke application covering request serialization and response deserialization.
+			- Added continuous integration checks for multi-target builds, unit tests, and linux-x64 Native AOT publishing.
 		</PackageReleaseNotes>
-		<PackageTags>bangumi;bgm;api;sdk;dotnet;httpclient</PackageTags>
+		<PackageTags>bangumi;bgm;api;sdk;dotnet;httpclient;native-aot;trimming</PackageTags>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<IsAotCompatible>true</IsAotCompatible>
 	</PropertyGroup>
