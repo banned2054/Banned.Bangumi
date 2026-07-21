@@ -4,7 +4,7 @@
 
 [![NuGet](https://img.shields.io/nuget/v/Banned.Bangumi.svg)](https://www.nuget.org/packages/Banned.Bangumi) [![Downloads](https://img.shields.io/nuget/dt/Banned.Bangumi.svg)](https://www.nuget.org/packages/Banned.Bangumi) [![License](https://img.shields.io/badge/license-Apache_2.0-green)](../LICENSE.txt)
 
-**Banned.Bangumi** 是基于 [Bangumi OpenAPI](https://github.com/bangumi/api) 的现代强类型 .NET SDK。它以 `BangumiClient` 为唯一入口，覆盖项目内置规范中的全部 56 个操作，并支持 .NET 8、.NET 9 和 .NET 10。
+**Banned.Bangumi** 是面向 [Bangumi API](https://github.com/bangumi/api) 的易用、强类型 .NET SDK，支持 Native AOT 和裁剪发布。数据模型以官方 OpenAPI 规范为基础生成并经过人工整理，不直接暴露机械生成的命名和结构。公共 API 按资源组织并统一由 `BangumiClient` 提供，覆盖项目内置规范中的全部 56 个操作，支持 .NET 8、.NET 9 和 .NET 10。
 
 ## ✨ 核心特性
 
@@ -12,10 +12,11 @@
 - **面向资源的设计**：将接口划分为职责明确的 Service，并统一由 `BangumiClient` 提供。
 - **异步优先**：所有网络操作均返回 `Task` 或 `Task<T>`，并接受 `CancellationToken`。
 - **鉴权语义明确**：区分无需 Token、可选 Token 和必须使用 Bearer Access Token 的接口。
-- **一致的公开模型**：使用具有业务含义的请求类型和统一的 `PagedResult<T>`，不暴露生成器导向的 Schema 名称。
+- **经过整理的 OpenAPI 模型**：将依据规范生成的模型重命名并重组为具有业务含义的资源类型，并统一使用 `PagedResult<T>`。
 - **安全的 HTTP 所有权**：SDK 不会修改或释放调用方传入的 `HttpClient`。
 - **内置代理支持**：无需自定义 `HttpClient` 即可配置 HTTP(S) 代理。
 - **多目标框架支持**：支持 `net8.0`、`net9.0` 和 `net10.0`。
+- **支持 Native AOT**：使用源码生成的 JSON 元数据，支持裁剪和 Native AOT 发布。
 - **双语 API 文档**：所有公开 API 均提供简体中文和英文 XML 文档。
 
 ## 📦 安装
@@ -237,6 +238,12 @@ dotnet test Banned.Bangumi.slnx
 并读取环境变量 `BANGUMI_USER_AGENT`、可选的 `BANGUMI_PROXY` 和可选的 `BANGUMI_ACCESS_TOKEN`。
 在 Visual Studio 中选择已被 Git 忽略的 `local.runsettings`，然后运行 `Integration` 分类即可。为避免同一请求
 发送三次，真实测试只在 .NET 10 目标上执行。SDK 和测试项目均覆盖 .NET 8、.NET 9 与 .NET 10。
+
+Native AOT 兼容性通过独立的自包含烟雾程序验证。该程序会覆盖请求序列化和响应反序列化，且不访问线上 API：
+
+```bash
+dotnet publish Banned.Bangumi.AotSmoke/Banned.Bangumi.AotSmoke.csproj -c Release -r linux-x64 -p:PublishAot=true
+```
 
 ## 📜 更新日志
 

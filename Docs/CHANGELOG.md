@@ -6,7 +6,28 @@ This format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## 📘 Versions
 
+- [v1.1.0](#-release-v110--native-aot-support--continuous-verification)
 - [v1.0.0](#-release-v100--full-api-coverage--stable-sdk-foundation)
+
+## 🚀 Release v1.1.0 — Native AOT Support & Continuous Verification
+
+**Release Date:** 2026-07-21
+
+This release adds Native AOT and trimming compatibility without changing the public API. JSON serialization now uses source-generated metadata for every API request and response type, while dedicated smoke and CI coverage verify the complete native publishing path.
+
+---
+
+### Added
+
+- Added Native AOT and trimming compatibility through source-generated `System.Text.Json` metadata.
+- Added a self-contained AOT smoke application and release-workflow verification for request serialization and response deserialization.
+- Added continuous integration checks for multi-target builds, unit tests, and `linux-x64` Native AOT publishing on pull requests and pushes to `master`.
+
+---
+
+### 📦 Notes
+
+Applications can opt into Native AOT by setting `<PublishAot>true</PublishAot>` in the executable project. Applications that do not enable Native AOT continue to use Banned.Bangumi as a regular managed .NET library.
 
 ## 🚀 Release v1.0.0 — Full API Coverage & Stable SDK Foundation
 

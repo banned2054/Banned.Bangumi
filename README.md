@@ -4,7 +4,7 @@ English | [简体中文](./Docs/README.md)
 
 [![NuGet](https://img.shields.io/nuget/v/Banned.Bangumi.svg)](https://www.nuget.org/packages/Banned.Bangumi) [![Downloads](https://img.shields.io/nuget/dt/Banned.Bangumi.svg)](https://www.nuget.org/packages/Banned.Bangumi) [![License](https://img.shields.io/badge/license-Apache_2.0-green)](./LICENSE.txt)
 
-**Banned.Bangumi** is a modern, strongly typed .NET SDK for the [Bangumi OpenAPI](https://github.com/bangumi/api). It exposes a single `BangumiClient` entry point, covers all 56 operations in the bundled specification, and targets .NET 8, .NET 9, and .NET 10.
+**Banned.Bangumi** is a user-friendly, strongly typed .NET SDK for the [Bangumi API](https://github.com/bangumi/api), with Native AOT and trimming support. Its models are derived from the official OpenAPI specification and carefully curated instead of exposing mechanically generated names and structures. A resource-oriented API available through one `BangumiClient` covers all 56 operations in the bundled specification and supports .NET 8, .NET 9, and .NET 10.
 
 ## ✨ Key Features
 
@@ -12,10 +12,11 @@ English | [简体中文](./Docs/README.md)
 - **Resource-Oriented Design**: Organizes endpoints into focused services available from one `BangumiClient`.
 - **Asynchronous First**: Every network operation returns `Task` or `Task<T>` and accepts a `CancellationToken`.
 - **Authentication-Aware**: Distinguishes endpoints that require no token, accept an optional token, or require a Bearer access token.
-- **Consistent Public Models**: Uses meaningful request types and a shared `PagedResult<T>` instead of generator-oriented schema names.
+- **Curated OpenAPI Models**: Renames and reshapes specification-derived models into meaningful resource types, including a shared `PagedResult<T>`.
 - **Safe HTTP Ownership**: A caller-provided `HttpClient` is never modified or disposed by the SDK.
 - **Built-in Proxy Support**: Configures HTTP(S) proxies without requiring a custom `HttpClient`.
 - **Multi-Target Support**: Builds for `net8.0`, `net9.0`, and `net10.0`.
+- **Native AOT Compatible**: Uses source-generated JSON metadata and supports trimming and Native AOT publishing.
 - **Bilingual API Documentation**: All public APIs include Simplified Chinese and English XML documentation.
 
 ## 📦 Installation
@@ -239,6 +240,13 @@ use the default API address and read `BANGUMI_USER_AGENT`, optional `BANGUMI_PRO
 `BANGUMI_ACCESS_TOKEN` environment variables. Select the ignored `local.runsettings` file in Visual Studio, then run
 the `Integration` category. Live tests execute only on the .NET 10 target to avoid sending each request three times.
 Both the SDK and test project target .NET 8, .NET 9, and .NET 10.
+
+Native AOT compatibility is verified with a self-contained smoke application that exercises both request serialization
+and response deserialization without accessing the live API:
+
+```bash
+dotnet publish Banned.Bangumi.AotSmoke/Banned.Bangumi.AotSmoke.csproj -c Release -r linux-x64 -p:PublishAot=true
+```
 
 ## 📜 Changelog
 
