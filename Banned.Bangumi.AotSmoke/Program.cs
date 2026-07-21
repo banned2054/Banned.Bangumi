@@ -4,13 +4,10 @@ using Banned.Bangumi.Models.Subjects;
 using System.Net;
 using System.Text;
 
-var handler = new SmokeHttpMessageHandler();
+var       handler    = new SmokeHttpMessageHandler();
 using var httpClient = new HttpClient(handler);
 using var client = new BangumiClient(new BangumiClientOptions
-{
-    UserAgent  = "Banned.Bangumi.AotSmoke/1.0",
-    HttpClient = httpClient
-});
+                                         { UserAgent = "Banned.Bangumi.AotSmoke/1.0", HttpClient = httpClient });
 
 var calendar = await client.Calendar.Get();
 if (calendar.Count != 1 || calendar[0].Weekday?.Id != 1)
@@ -22,11 +19,8 @@ var subjects = await client.Subjects.Search(new SubjectSearchRequest
 {
     Keyword = "AOT",
     Sort    = SubjectSearchSort.Rank,
-    Filter = new SubjectSearchFilter
-    {
-        NsfwFilter = NsfwFilterMode.Exclude
-    },
-    Limit = 20
+    Filter  = new SubjectSearchFilter { NsfwFilter = NsfwFilterMode.Exclude },
+    Limit   = 20
 });
 
 if (subjects.Total != 0 || handler.SearchRequestBody is null ||
@@ -41,19 +35,19 @@ internal sealed class SmokeHttpMessageHandler : HttpMessageHandler
     internal string? SearchRequestBody { get; private set; }
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
-                                                                  CancellationToken cancellationToken)
+                                                                 CancellationToken  cancellationToken)
     {
         string responseBody;
         if (request.RequestUri?.AbsolutePath == "/calendar")
         {
             responseBody = """
-                           [{"weekday":{"en":"Monday","cn":"星期一","ja":"月曜日","id":1},"items":[]}]
-                           """;
+            [{"weekday":{"en":"Monday","cn":"星期一","ja":"月曜日","id":1},"items":[]}]
+            """;
         }
         else if (request.RequestUri?.AbsolutePath == "/v0/search/subjects")
         {
             SearchRequestBody = await request.Content!.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            responseBody = "{\"total\":0,\"limit\":20,\"offset\":0,\"data\":[]}";
+            responseBody      = "{\"total\":0,\"limit\":20,\"offset\":0,\"data\":[]}";
         }
         else
         {

@@ -16,10 +16,11 @@ internal sealed class BangumiHttpService : IDisposable
 {
     private const int MaximumDiagnosticBodyLength = 16 * 1024;
 
-    private readonly Uri                   _baseAddress;
-    private readonly HttpClient            _httpClient;
     private readonly BangumiJsonSerializerContext _serializerContext;
-    private readonly TimeSpan              _timeout;
+
+    private readonly HttpClient _httpClient;
+    private readonly Uri        _baseAddress;
+    private readonly TimeSpan   _timeout;
 
     private readonly string? _accessToken;
     private readonly string  _userAgent;
@@ -153,10 +154,10 @@ internal sealed class BangumiHttpService : IDisposable
         ArgumentNullException.ThrowIfNull(body);
         var requestBody = JsonSerializer.Serialize(body, GetTypeInfo<TRequest>());
         return await SendResponse<TResponse>(method, path, authenticationMode, requestBody, cancellationToken)
-                    .ConfigureAwait(false);
+           .ConfigureAwait(false);
     }
 
-    internal async Task Send(HttpMethod method, string path, AuthenticationMode authenticationMode,
+    internal async Task Send(HttpMethod        method, string path, AuthenticationMode authenticationMode,
                              CancellationToken cancellationToken = default)
     {
         using var timeoutSource              = CreateTimeoutSource(cancellationToken);
@@ -172,11 +173,11 @@ internal sealed class BangumiHttpService : IDisposable
                                        CancellationToken  cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(body);
-        var requestBody = JsonSerializer.Serialize(body, GetTypeInfo<TRequest>());
+        var       requestBody                = JsonSerializer.Serialize(body, GetTypeInfo<TRequest>());
         using var timeoutSource              = CreateTimeoutSource(cancellationToken);
         var       effectiveCancellationToken = timeoutSource?.Token ?? cancellationToken;
         using var response = await SendCore(method, path, authenticationMode, requestBody, effectiveCancellationToken)
-                                  .ConfigureAwait(false);
+           .ConfigureAwait(false);
     }
 
     private async Task<TResponse> SendResponse<TResponse>(HttpMethod         method,
@@ -188,7 +189,7 @@ internal sealed class BangumiHttpService : IDisposable
         using var timeoutSource              = CreateTimeoutSource(cancellationToken);
         var       effectiveCancellationToken = timeoutSource?.Token ?? cancellationToken;
         using var response = await SendCore(method, path, authenticationMode, requestBody, effectiveCancellationToken)
-                                  .ConfigureAwait(false);
+           .ConfigureAwait(false);
         var responseBody = await response.Content.ReadAsStringAsync(effectiveCancellationToken)
                                          .ConfigureAwait(false);
 
@@ -213,7 +214,7 @@ internal sealed class BangumiHttpService : IDisposable
     private async Task<HttpResponseMessage> SendCore(HttpMethod         method,
                                                      string             path,
                                                      AuthenticationMode authenticationMode,
-                                                      string?            requestBody,
+                                                     string?            requestBody,
                                                      CancellationToken  cancellationToken,
                                                      bool               allowRedirectResponse = false)
     {

@@ -69,7 +69,7 @@ public sealed class IndexService
 
         return await HttpService
                     .Send<IndexUpdateRequest, BangumiIndex>(HttpMethod.Put, $"/v0/indices/{indexId}",
-                                                           AuthenticationMode.Required, request, cancellationToken)
+                                                            AuthenticationMode.Required, request, cancellationToken)
                     .ConfigureAwait(false);
     }
 
